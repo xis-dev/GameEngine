@@ -8,6 +8,9 @@ add_subdirectory(../AGP_Engine AGP_Engine)
 
 add_executable(AGP_Xenon src/main.cpp)
 
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${PROJECT_SOURCE_DIR}
+)
 target_link_libraries(
         ${PROJECT_NAME} PUBLIC
 
