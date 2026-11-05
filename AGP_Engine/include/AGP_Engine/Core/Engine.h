@@ -2,5 +2,7 @@
 
 class Engine {
 
-    Engine() = default;
+    Engine(int windowWidth, int windowHeight, int windowTitle);
+
+    
 };

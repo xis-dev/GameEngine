@@ -18,7 +18,11 @@ add_library(AGP_Engine STATIC src/library.cpp
         src/Core/Engine.cpp
         include/AGP_Engine/Core/Engine.h
         src/Core/Window.cpp
-        include/AGP_Engine/Core/Window.h)
+        include/AGP_Engine/Core/Window.h
+        src/Graphics/Renderer.cpp
+        include/AGP_Engine/Graphics/Renderer.h
+        src/Core/Level.cpp
+        include/AGP_Engine/Core/Level.h)
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
