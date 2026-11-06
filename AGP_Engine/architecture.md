@@ -1,4 +1,4 @@
-# Architecture
+# {Insert Name} Architecture 
 
 ## Decisions
 
