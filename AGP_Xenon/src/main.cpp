@@ -1,7 +1,13 @@
-#include "AGP_Engine/library.h"
 
-#include "include/hello.h"
+#include "AGP_Engine/Core/Engine.h"
+
+#include <iostream>
 
 int main() {
-    helloX();
+    AGPEngine::Engine e{};
+
+    e.init(1, 1, "NOO");
+    e.run();
+    e.cleanup();
+
 }
