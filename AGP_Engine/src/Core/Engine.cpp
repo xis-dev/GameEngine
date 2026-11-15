@@ -12,6 +12,22 @@
 
 #include <glad/glad.h>
 
+AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
+
+    if (!init(winWidth, winHeight, winTitle)) {
+        return;
+    }
+
+    if (runOnInit) { run(); }
+
+}
+
+AGPEngine::Engine::~Engine() {
+    if (valid) {
+        cleanup();
+    }
+}
+
 bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -22,7 +38,8 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
     if (!window) {
         std::cerr << "AGP_ENGINE: Failed to initialize engine, could not create window.\n";
         SDL_Quit();
-        return false;
+        valid = false;
+        return valid;
     }
 
     // Set current context
@@ -32,14 +49,21 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
     {
         std::cerr << "AGP_ENGINE: Failed to initialize engine, could not initialize glad.\n";
         SDL_Quit();
-        return false;
+        valid = false;
+        return valid;
     }
 
-    return true;
+    valid = true;
+    return valid;
 
 }
 
 void AGPEngine::Engine::run() {
+
+    if (!valid) {
+        std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state, it likely has not been initialized or failed to initialize.\n";
+        return;
+    }
 
     bool running = true;
     SDL_Event event;
@@ -75,4 +99,6 @@ void AGPEngine::Engine::cleanup() {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+
+    valid = false;
 }

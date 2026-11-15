@@ -4,10 +4,7 @@
 #include <iostream>
 
 int main() {
-    AGPEngine::Engine e{};
+    AGPEngine::Engine e{1, 1, "AGPEngine"};
 
-    e.init(1, 1, "NOO");
-    e.run();
-    e.cleanup();
 
 }
