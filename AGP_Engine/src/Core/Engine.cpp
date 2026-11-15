@@ -30,25 +30,21 @@ AGPEngine::Engine::~Engine() {
 
 bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
 
-    SDL_Init(SDL_INIT_VIDEO);
-
-    window = SDL_CreateWindow(winTitle.c_str(), winWidth, winHeight,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-
-    if (!window) {
+    auto optWin = Window::Create(winTitle, winWidth, winHeight);
+    if (!optWin.has_value()) {
         std::cerr << "AGP_ENGINE: Failed to initialize engine, could not create window.\n";
-        SDL_Quit();
         valid = false;
         return valid;
     }
 
+    window = std::move(optWin.value());
+
     // Set current context
-    SDL_GL_CreateContext(window);
+    SDL_GL_CreateContext(window.getNativeWindow());
 
     if (!gladLoadGLLoader((GLADloadproc)(SDL_GL_GetProcAddress)))
     {
         std::cerr << "AGP_ENGINE: Failed to initialize engine, could not initialize glad.\n";
-        SDL_Quit();
         valid = false;
         return valid;
     }
@@ -91,14 +87,11 @@ void AGPEngine::Engine::run() {
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_GL_SwapWindow(window);
+        SDL_GL_SwapWindow(window.getNativeWindow());
     }
 }
 
 void AGPEngine::Engine::cleanup() {
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    valid = false;
+    Window::CleanupBackend();
 }

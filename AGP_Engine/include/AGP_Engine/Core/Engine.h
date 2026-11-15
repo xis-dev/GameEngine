@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Window.h"
 #include "SDL3/SDL_video.h"
 
 namespace AGPEngine {
@@ -16,8 +17,8 @@ namespace AGPEngine {
         void run();
         void cleanup();
 
-        // TODO: Temporary variables, should be wrapped or removed
-        SDL_Window* window {nullptr};
+        // TODO: Since there is likely no editor, this could be a per level thing
+        Window window;
 
     private:
         // Engine has been initialized and is in a valid state to be destroyed
