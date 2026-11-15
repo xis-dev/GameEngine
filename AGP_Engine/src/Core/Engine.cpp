@@ -12,6 +12,8 @@
 
 #include <glad/glad.h>
 
+#include "Graphics/Renderer.h"
+
 AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
 
     if (!init(winWidth, winHeight, winTitle)) {
@@ -39,8 +41,7 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
 
     window = std::move(optWin.value());
 
-    // Set current context
-    SDL_GL_CreateContext(window.getNativeWindow());
+    Renderer::SetRenderContext(window);
 
     if (!gladLoadGLLoader((GLADloadproc)(SDL_GL_GetProcAddress)))
     {
@@ -87,7 +88,7 @@ void AGPEngine::Engine::run() {
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        SDL_GL_SwapWindow(window.getNativeWindow());
+        Renderer::SwapBuffer(window);
     }
 }
 
