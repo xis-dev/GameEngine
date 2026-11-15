@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 4.3)
 project(AGP_Engine)
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 # Libraries
 include(FetchContent)
@@ -14,22 +15,52 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(box2d)
 
-add_library(AGP_Engine STATIC src/library.cpp
+FetchContent_Declare(
+        SDL3
+        GIT_TAG release-3.4.18
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
+        GIT_SHALLOW TRUE
+)
+
+set(SDL_SHARED OFF CACHE BOOL "" FORCE)   # no SDL3.dll / libSDL3.dylib to ship
+set(SDL_STATIC ON  CACHE BOOL "" FORCE)   # link SDL3 into our executable
+set(SDL_TEST_LIBRARY OFF CACHE BOOL "" FORCE)
+set(SDL_TESTS OFF CACHE BOOL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(SDL3)
+
+set(GLAD_DIR ${PROJECT_SOURCE_DIR}/external_deps/glad)
+
+set(DEPS_DIRS
+        ${GLAD_DIR})
+
+set(DEPS_SOURCES
+        ${GLAD_DIR}/glad.c)
+
+set(PROJECT_SOURCES
         src/Core/Engine.cpp
-        include/AGP_Engine/Core/Engine.h
         src/Core/Window.cpp
-        include/AGP_Engine/Core/Window.h
         src/Graphics/Renderer.cpp
-        include/AGP_Engine/Graphics/Renderer.h
         src/Core/Level.cpp
-        include/AGP_Engine/Core/Level.h
-        src/Resources/ResourceManager.cpp
-        include/Resources/ResourceManager.h)
+        src/Resources/ResourceManager.cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC include)
+add_library(AGP_Engine STATIC src/library.cpp
+        ${DEPS_SOURCES}
+        ${PROJECT_SOURCES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE include/AGP_Engine)
+target_compile_definitions(AGP_Engine PRIVATE
+        $<$<CONFIG:Debug>:DEBUG>
+)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_include_directories(AGP_Engine PUBLIC
+        include
+        ${DEPS_DIRS}
+)
+
+target_include_directories(AGP_Engine PRIVATE include/AGP_Engine)
+
+target_link_libraries(AGP_Engine PRIVATE
         box2d::box2d
+        SDL3::SDL3-static
 )
