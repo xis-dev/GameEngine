@@ -1,9 +1,10 @@
 #pragma once
 
-#include <optional>
-#include <string>
 
 #include "SDL3/SDL_video.h"
+
+#include <expected>
+#include <string>
 
 namespace AGPEngine {
 
@@ -19,12 +20,16 @@ namespace AGPEngine {
 
         ~Window();
 
+        struct Error {
+            [[maybe_unused]] std::string message{};
+        };
+
         // Initialization for the overall window backend to allow creation of windows
         // Must be called before any window creation
         static void InitializeBackend();
         // Window creation may fail, optional to error handle on failure
         // TODO: Not 100% on using optional here, could use boolean + reference
-        static std::optional<Window> Create(const std::string& title, int w, int h);
+        static std::expected<Window, Error> Create(const std::string& title, int w, int h);
         static void CleanupBackend();
 
     private:
@@ -38,3 +43,6 @@ namespace AGPEngine {
         static bool BackendIsInitialized;
     };
 }
+
+static AGPEngine::Window::Error InitFailed {"AGP_ENGINE: Window backend initialization failed.\n"};
+static AGPEngine::Window::Error CreateFailed {"AGP_ENGINE: Window creation failed.\n"};

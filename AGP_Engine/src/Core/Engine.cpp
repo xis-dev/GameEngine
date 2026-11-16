@@ -8,7 +8,7 @@
 
 #include "SDL3/SDL.h"
 
-#include "Utility.h"
+#include "../../include/AGP_Engine/Utility/Utility.h"
 
 #include <glad/glad.h>
 
@@ -32,14 +32,14 @@ AGPEngine::Engine::~Engine() {
 
 bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
 
-    auto optWin = Window::Create(winTitle, winWidth, winHeight);
-    if (!optWin.has_value()) {
-        std::cerr << "AGP_ENGINE: Failed to initialize engine, could not create window.\n";
+    auto win = Window::Create(winTitle, winWidth, winHeight);
+    if (!win) {
+        std::cerr << "AGP_ENGINE: Failed to initialize engine.\n" << win.error().message << "\n";
         valid = false;
         return valid;
     }
 
-    window = std::move(optWin.value());
+    window = std::move(win.value());
 
     Renderer::SetRenderContext(window);
 

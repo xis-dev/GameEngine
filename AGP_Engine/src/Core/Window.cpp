@@ -20,7 +20,7 @@ namespace AGPEngine {
         }
     }
 
-    std::optional<Window> Window::Create(const std::string& title, int w, int h) {
+    std::expected<Window, Window::Error> Window::Create(const std::string &title, int w, int h) {
 
         // Lazy initialize backend
         if (!BackendIsInitialized) {
@@ -30,6 +30,10 @@ namespace AGPEngine {
         // SDL Window creation
         SDL_Window* sdlWin = SDL_CreateWindow(title.c_str(), w, h,
             SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+
+        if (!sdlWin) {
+            return std::unexpected<Error>(CreateFailed.message + SDL_GetError());
+        }
 
         return Window{sdlWin};
 
