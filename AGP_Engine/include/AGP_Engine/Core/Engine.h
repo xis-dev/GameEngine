@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Window.h"
-#include "SDL3/SDL_video.h"
 
 namespace AGPEngine {
     class Engine {

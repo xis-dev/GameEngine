@@ -27,8 +27,7 @@ namespace AGPEngine {
         // Initialization for the overall window backend to allow creation of windows
         // Must be called before any window creation
         static void InitializeBackend();
-        // Window creation may fail, optional to error handle on failure
-        // TODO: Not 100% on using optional here, could use boolean + reference
+        // Window creation may fail, expected to error handle on failure
         static std::expected<Window, Error> Create(const std::string& title, int w, int h);
         static void CleanupBackend();
 

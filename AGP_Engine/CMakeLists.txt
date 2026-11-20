@@ -43,7 +43,8 @@ set(PROJECT_SOURCES
         src/Core/Window.cpp
         src/Graphics/Renderer.cpp
         src/Core/Level.cpp
-        src/Resources/ResourceManager.cpp)
+        src/Resources/ResourceManager.cpp
+        include/AGP_Engine/Resources/Resource.h)
 
 add_library(AGP_Engine STATIC src/library.cpp
         ${DEPS_SOURCES}
