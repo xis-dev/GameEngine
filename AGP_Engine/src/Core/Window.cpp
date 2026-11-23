@@ -6,8 +6,9 @@
 namespace AGPEngine {
 
 bool Window::BackendIsInitialized = false;
-
-std::expected<Window, Error> Window::Create(const std::string& title, int w, int h) {
+     
+    
+std::expected<Window, Window::Error> Window::Create(const std::string& title, int w, int h) {
     if (!BackendIsInitialized) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
             return std::unexpected{ Error{ std::string("SDL_Init failed: ") + SDL_GetError() } };
@@ -22,8 +23,7 @@ std::expected<Window, Error> Window::Create(const std::string& title, int w, int
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    SDL_Window* win = SDL_CreateWindow(title.c_str(), w, h,
-        SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    SDL_Window* win = SDL_CreateWindow(title.c_str(), w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     if (!win) {
         return std::unexpected{ Error{ std::string("SDL_CreateWindow failed: ") + SDL_GetError() } };
     }

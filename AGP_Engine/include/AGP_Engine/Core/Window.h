@@ -27,18 +27,29 @@ namespace AGPEngine {
         // Initialization for the overall window backend to allow creation of windows
         // Must be called before any window creation
         static void InitializeBackend();
+        
         // Window creation may fail, expected to error handle on failure
-        static std::expected<Window, Error> Create(const std::string& title, int w, int h);
+        [[nodiscard]]static std::expected<Window, Error> Create(const std::string& title, int w, int h);
         static void CleanupBackend();
 
+        [[nodiscard]] void* GetProcAddress(const char* name) const;
+        void MakeCurrent() const;
+        void SwapBuffers() const;
+        void GetSize(int& w, int& h) const;
+
+        [[nodiscard]] SDL_Window* getNativeWindow() const { return m_sdlWindow; }
+
+        
+        
     private:
         // Private constructor to easily construct from SDL windows
-        explicit Window(SDL_Window* sdlWindow): m_sdlWindow(sdlWindow){}
+        explicit Window(SDL_Window* sdlWindow, SDL_GLContext sdlContext): m_sdlWindow(sdlWindow), m_glContext(sdlContext){}
 
     public:
         [[nodiscard]] SDL_Window* getNativeWindow() const{return m_sdlWindow;}
     private:
         SDL_Window* m_sdlWindow{nullptr};
+        SDL_GLContext m_glContext{nullptr};
         static bool BackendIsInitialized;
     };
 }
