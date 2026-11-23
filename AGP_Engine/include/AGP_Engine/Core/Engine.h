@@ -22,6 +22,6 @@ namespace AGPEngine {
     private:
         // Engine has been initialized and is in a valid state to be destroyed
         bool valid{};
-
+       
     };
 }

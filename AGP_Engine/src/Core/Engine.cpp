@@ -39,11 +39,8 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
 
     window = std::move(win.value());
 
-    if (!gladLoadGLLoader((GLADloadproc)window.getGLProcAddress)) {
-        std::cerr << "AGP_ENGINE: glad failed to load GL function pointers.\n";
-        valid = false;
-        return valid;
-    }
+    
+   
     
     Renderer::Init();
     valid = true;
@@ -87,7 +84,7 @@ void AGPEngine::Engine::run() {
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-     //   Renderer::SwapBuffer(window);
+      window.SwapBuffers();
     }
 }
 
