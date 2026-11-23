@@ -30,18 +30,18 @@ namespace AGPEngine {
         // Window creation may fail, expected to error handle on failure
         [[nodiscard]]static std::expected<Window, Error> Create(const std::string& title, int w, int h);
         static void CleanupBackend();
+        [[nodiscard]] static void* GetProcAddress(const char* name) ;
+        static void MakeRenderContext(const Window& window);
 
-        
-        
-        [[nodiscard]] void* GetProcAddress(const char* name) const;
-        void MakeCurrent() const;
-        void SwapBuffers() const;
-        void GetSize(int& w, int& h) const;
-
+        void swapBuffers() const;
         [[nodiscard]] SDL_Window* getNativeWindow() const { return m_sdlWindow; }
+        void getSize(int& w, int& h) const;
+        void setVsync(bool on);
 
-        
-        
+        [[nodiscard]] bool isValid() const;
+
+        void destroy();
+
     private:
         // Private constructor to easily construct from SDL windows
         explicit Window(SDL_Window* sdlWindow, SDL_GLContext sdlContext): m_sdlWindow(sdlWindow), m_glContext(sdlContext){}
@@ -54,5 +54,3 @@ namespace AGPEngine {
     };
 }
 
-static AGPEngine::Window::Error InitFailed {"AGP_ENGINE: Window backend initialization failed.\n"};
-static AGPEngine::Window::Error CreateFailed {"AGP_ENGINE: Window creation failed.\n"};

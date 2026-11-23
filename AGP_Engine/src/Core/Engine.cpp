@@ -5,7 +5,6 @@
 #include "Core/Engine.h"
 #include <iostream>
 #include "SDL3/SDL.h"
-#include "../../include/AGP_Engine/Utility/Utility.h"
 #include <glad/glad.h>
 #include "Graphics/Renderer.h"
 
@@ -37,16 +36,13 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
         return valid;
     }
 
-    window = std::move(win.value());
-
+    m_window = std::make_unique<Window>(std::move(win.value()));
+    m_renderer = std::make_unique<Renderer>(m_window.get(), winWidth, winHeight);
     
-   
-    
-    Renderer::Init();
+    //Renderer::Init();
     valid = true;
     return valid;
     
-  //  Renderer::SetRenderContext(window);
 
    
 }
@@ -81,17 +77,20 @@ void AGPEngine::Engine::run() {
             }
         }
 
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-      window.SwapBuffers();
+      m_window->swapBuffers();
     }
 }
 
 void AGPEngine::Engine::cleanup() {
 
     Renderer::Shutdown();
-    window = Window{}; //Reset GL ctx & SDL Window 
+    m_window->destroy();
+
     Window::CleanupBackend();
     
 }
+
+bool AGPEngine::Engine::isValid() const { return valid; }

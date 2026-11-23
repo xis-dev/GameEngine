@@ -1,14 +1,15 @@
 #pragma once
 
+#include <memory>
 #include <string>
 
 #include "Window.h"
+#include "AGP_Engine/Graphics/Renderer.h"
 
 namespace AGPEngine {
     class Engine {
 
     public:
-        Engine() = default;
         Engine(int winWidth, int winHeight, const std::string& winTitle, bool runOnInit = true);
         ~Engine();
 
@@ -16,12 +17,14 @@ namespace AGPEngine {
         void run();
         void cleanup();
 
-        // TODO: Since there is likely no editor, this could be a per level thing
-        Window window;
+        [[nodiscard]] bool isValid() const;
 
     private:
         // Engine has been initialized and is in a valid state to be destroyed
         bool valid{};
-       
+
+        std::unique_ptr<Window> m_window{};
+        std::unique_ptr<Renderer> m_renderer;
+
     };
 }

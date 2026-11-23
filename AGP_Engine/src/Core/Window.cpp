@@ -2,12 +2,13 @@
 #include "Core/Window.h"
 #include <SDL3/SDL.h>
 #include <iostream>
+#include <utility>
 
 namespace AGPEngine {
 
 bool Window::BackendIsInitialized = false;
-     
-    
+
+
 std::expected<Window, Window::Error> Window::Create(const std::string& title, int w, int h) {
     if (!BackendIsInitialized) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
@@ -34,9 +35,6 @@ std::expected<Window, Window::Error> Window::Create(const std::string& title, in
         return std::unexpected{ Error{ std::string("SDL_GL_CreateContext failed: ") + SDL_GetError() } };
     }
 
-    SDL_GL_MakeCurrent(win, ctx);
-    SDL_GL_SetSwapInterval(1);   // vsync
-
     return Window{ win, ctx };
 }
 
@@ -47,16 +45,28 @@ void Window::CleanupBackend() {
     }
 }
 
-void* Window::GetProcAddress(const char* name) const {
+void* Window::GetProcAddress(const char* name) {
     return reinterpret_cast<void*>(SDL_GL_GetProcAddress(name));
 }
-void Window::MakeCurrent() const  { SDL_GL_MakeCurrent(m_sdlWindow, m_glContext); }
-void Window::SwapBuffers() const  { SDL_GL_SwapWindow(m_sdlWindow); }
-void Window::GetSize(int& w, int& h) const { SDL_GetWindowSize(m_sdlWindow, &w, &h); }
+void Window::MakeRenderContext(const Window& win)  { SDL_GL_MakeCurrent(win.m_sdlWindow, win.m_glContext); }
+void Window::swapBuffers() const  { SDL_GL_SwapWindow(m_sdlWindow); }
+void Window::getSize(int& w, int& h) const { SDL_GetWindowSize(m_sdlWindow, &w, &h); }
 
-Window::~Window() {
+void Window::setVsync(bool on) {
+    SDL_GL_SetSwapInterval(on);   // vsync
+}
+
+bool Window::isValid() const { return m_sdlWindow != nullptr;}
+
+void Window::destroy() {
     if (m_glContext) SDL_GL_DestroyContext(m_glContext);
     if (m_sdlWindow) SDL_DestroyWindow(m_sdlWindow);
+}
+
+Window::~Window() {
+    if (isValid()) {
+        destroy();
+    }
 }
 Window::Window(Window&& w) noexcept
     : m_sdlWindow(std::exchange(w.m_sdlWindow, nullptr))

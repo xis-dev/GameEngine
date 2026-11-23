@@ -1,5 +1,9 @@
 #pragma once
 
-class Level {
+#include "Window.h"
 
-};
+namespace AGPEngine {
+
+    class Level {
+    };
+}

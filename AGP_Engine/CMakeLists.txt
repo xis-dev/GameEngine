@@ -3,6 +3,7 @@ project(AGP_Engine)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Libraries
 include(FetchContent)
@@ -43,10 +44,9 @@ set(PROJECT_SOURCES
         src/Core/Window.cpp
         src/Graphics/Renderer.cpp
         src/Core/Level.cpp
-        src/Resources/ResourceManager.cpp
-        include/AGP_Engine/Resources/Resource.h)
+        src/Resources/ResourceManager.cpp)
 
-add_library(AGP_Engine STATIC src/library.cpp
+add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
         ${PROJECT_SOURCES})
 
