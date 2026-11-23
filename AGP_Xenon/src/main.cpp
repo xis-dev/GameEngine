@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main() {
-    AGPEngine::Engine e{1, 1, "AGPEngine"};
+    AGPEngine::Engine e{500, 500, "AGPEngine"};
 
 
 }
