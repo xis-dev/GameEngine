@@ -21,7 +21,7 @@ namespace AGPEngine {
         ~Window();
 
         struct Error {
-            [[maybe_unused]] std::string message{};
+            std::string message{};
         };
 
         // Initialization for the overall window backend to allow creation of windows
