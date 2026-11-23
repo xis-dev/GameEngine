@@ -3,16 +3,14 @@
 //
 
 #include "Core/Engine.h"
-
 #include <iostream>
-
 #include "SDL3/SDL.h"
-
 #include "../../include/AGP_Engine/Utility/Utility.h"
-
 #include <glad/glad.h>
-
 #include "Graphics/Renderer.h"
+
+
+
 
 AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
 
@@ -41,24 +39,25 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
 
     window = std::move(win.value());
 
-    Renderer::SetRenderContext(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)(SDL_GL_GetProcAddress)))
-    {
-        std::cerr << "AGP_ENGINE: Failed to initialize engine, could not initialize glad.\n";
+    if (!gladLoadGLLoader((GLADloadproc)window.getGLProcAddress)) {
+        std::cerr << "AGP_ENGINE: glad failed to load GL function pointers.\n";
         valid = false;
         return valid;
     }
-
+    
+    Renderer::Init();
     valid = true;
     return valid;
+    
+  //  Renderer::SetRenderContext(window);
 
+   
 }
 
 void AGPEngine::Engine::run() {
 
     if (!valid) {
-        std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state, it likely has not been initialized or failed to initialize.\n";
+        std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state! It likely has not been initialized or failed to initialize.\n";
         return;
     }
 
@@ -88,11 +87,14 @@ void AGPEngine::Engine::run() {
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        Renderer::SwapBuffer(window);
+     //   Renderer::SwapBuffer(window);
     }
 }
 
 void AGPEngine::Engine::cleanup() {
 
+    Renderer::Shutdown();
+    window = Window{}; //Reset GL ctx & SDL Window 
     Window::CleanupBackend();
+    
 }

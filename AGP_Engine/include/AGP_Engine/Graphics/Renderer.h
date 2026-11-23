@@ -6,7 +6,10 @@ namespace AGPEngine {
     class Renderer {
 
     public:
-        static void SetRenderContext(const Window& win);
-        static void SwapBuffer(const Window& win);
+        
+        static void Init();
+        static void Shutdown();
+        
+        //Moved SwapBuffers and SetRendercontext to Window. This way we have to handle less files and Windows takes care of these issues
     };
 }
