@@ -24,3 +24,13 @@ template <typename... Args>
 #else
 #define AGPASSERT(cond, ...) ((void)0)
 #endif
+
+namespace AGPEngine {
+
+    template<typename T>
+    struct Error {
+        [[maybe_unused]] uint32_t code{};
+        [[maybe_unused]] std::string message{};
+    };
+
+}

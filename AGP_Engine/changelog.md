@@ -6,3 +6,6 @@
 > - Added window destroy function.
 > - Added Renderer and Window unique pointers to engine.
 > - Created renderer construction base.
+
+> **2026-11-23 - 21:00 - 21:30 | David**
+> - Started shaders, added basic shader source loading.

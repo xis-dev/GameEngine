@@ -44,7 +44,9 @@ set(PROJECT_SOURCES
         src/Core/Window.cpp
         src/Graphics/Renderer.cpp
         src/Core/Level.cpp
-        src/Resources/ResourceManager.cpp)
+        src/Resources/ResourceManager.cpp
+        src/Resources/Shader.cpp
+        include/AGP_Engine/Resources/Shader.h)
 
 add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}

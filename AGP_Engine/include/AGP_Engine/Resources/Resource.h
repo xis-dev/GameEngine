@@ -21,7 +21,6 @@
         GPUResource(GPUResource&& r) noexcept: m_handle(std::exchange(r.m_handle, InvalidHandle)){}
         GPUResource& operator=(GPUResource&& r) noexcept {
             if (this != &r) {
-                // This might actually call the abstract gpu destroy? leaks all resources if so
                 destroy();
                 m_handle = std::exchange(r.m_handle, InvalidHandle);
             }
@@ -33,7 +32,7 @@
 
 
         virtual void destroy() = 0;
-    private:
 
+    protected:
         uint32_t m_handle{InvalidHandle};
     };

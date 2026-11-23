@@ -5,10 +5,13 @@
 #include <expected>
 #include <string>
 
+#include "AGP_Engine/Utility/Utility.h"
+
 namespace AGPEngine {
 
     class Window {
 
+        using Error = Error<Window>;
     public:
         Window() = default;
         Window(const Window&) = delete;
@@ -18,10 +21,6 @@ namespace AGPEngine {
         Window& operator=(Window&&) noexcept;
 
         ~Window();
-
-        struct Error {
-            std::string message{};
-        };
 
         // Initialization for the overall window backend to allow creation of windows
         // Must be called before any window creation
@@ -46,7 +45,7 @@ namespace AGPEngine {
         // Private constructor to easily construct from SDL windows
         explicit Window(SDL_Window* sdlWindow, SDL_GLContext sdlContext): m_sdlWindow(sdlWindow), m_glContext(sdlContext){}
 
-   
+
     private:
         SDL_Window* m_sdlWindow{nullptr};
         SDL_GLContext m_glContext{nullptr};
