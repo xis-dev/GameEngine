@@ -4,6 +4,7 @@
 
 #include "../../include/AGP_Engine/Resources/Shader.h"
 
+#include <expected>
 #include <fstream>
 #include <sstream>
 
@@ -17,21 +18,32 @@ namespace AGPEngine {
 
     Shader::Shader(const std::string &vert, const std::string &frag) {
 
+        auto vertSrc = GetShaderSource(vert);
+        if (!vertSrc) {
+            std::cerr << vertSrc.error().message << "\n";
+            return;
+        }
+        auto fragSrc = GetShaderSource(frag);
+        if (!fragSrc) {
+            std::cerr << fragSrc.error().message << "\n";
+            return;
+        }
+
         m_handle = glCreateProgram();
-        auto vertSrc = getShaderSource(vert);
-        auto fragSrc = getShaderSource(frag);
 
         GLuint vertID = glCreateShader(GL_VERTEX_SHADER);
         GLuint fragID = glCreateShader(GL_FRAGMENT_SHADER);
 
-        glShaderSource(vertID, 1, reinterpret_cast<const GLchar * const *>(vertSrc.c_str()), nullptr);
-        glShaderSource(fragID, 1, reinterpret_cast<const GLchar * const *>(fragSrc.c_str()), nullptr);
+        const char* cVertSrc = vertSrc.value().c_str();
+        const char* cFragSrc = fragSrc.value().c_str();
 
-        glCompileShader(vertID);
+        glShaderSource(vertID, 1,  &cVertSrc, nullptr);
+        glShaderSource(fragID, 1,  &cFragSrc, nullptr);
 
         char infoLog[512];
         int success;
 
+        glCompileShader(vertID);
         // Vert shader compilation error checking
         glGetShaderiv(vertID, GL_COMPILE_STATUS, &success);
 
@@ -41,6 +53,7 @@ namespace AGPEngine {
             return;
         }
 
+        glCompileShader(fragID);
         // frag shader compilation error checking
         glGetShaderiv(fragID, GL_COMPILE_STATUS, &success);
 
@@ -75,16 +88,18 @@ namespace AGPEngine {
     void Shader::destroy() {
         if (m_handle != InvalidHandle) {
             glDeleteProgram(m_handle);
+            m_handle = InvalidHandle;
         }
+
     }
 
-    std::string Shader::getShaderSource(const std::string &file) {
+    std::expected<std::string, Error<Shader>> Shader::GetShaderSource(const std::string &file) {
 
         std::ifstream stream{file};
-
+        stream.open(file);
         if (!stream.is_open()) {
             std::cerr << "AGP_ENGINE::SHADER: Failed to load shader file: " << file.c_str() << "\n";
-            return {};
+            return std::unexpected(Error<Shader>{.message = "AGP_ENGINE: Failed to open shader file: " + file});
         }
 
         std::stringstream outSrc;

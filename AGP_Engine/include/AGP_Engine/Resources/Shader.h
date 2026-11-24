@@ -1,7 +1,9 @@
 #pragma once
 
+#include <expected>
+
 #include "Resource.h"
-#include "Utility/Utility.h"
+#include "AGP_Engine/Utility/Utility.h"
 
 
 namespace AGPEngine {
@@ -24,7 +26,6 @@ namespace AGPEngine {
 
     class Shader: public GPUResource {
 
-        using Error = Error<Shader>;
     public:
         Shader() = default;
 
@@ -43,6 +44,6 @@ namespace AGPEngine {
         void destroy() override;
 
     private:
-        std::string getShaderSource(const std::string& file);
+        static std::expected<std::string, Error<Shader>> GetShaderSource(const std::string &file);
     };
 }

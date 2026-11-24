@@ -1,5 +1,7 @@
 #pragma once
+
 #include "AGP_Engine/Core/Window.h"
+#include "AGP_Engine/Resources/Shader.h"
 
 namespace AGPEngine {
 
@@ -21,5 +23,10 @@ namespace AGPEngine {
         int m_viewportWidth{};
         int m_viewportHeight{};
         Window* m_renderWindow{nullptr};
+
+
+        // Temporary variables
+        uint32_t vao, vbo;
+        Shader triangleShader{};
     };
 }

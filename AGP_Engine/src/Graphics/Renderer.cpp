@@ -4,9 +4,12 @@
 
 
 #include "../../include/AGP_Engine/Graphics/Renderer.h"
+
+#include <filesystem>
 #include <glad/glad.h>
 #include <iostream>
 #include "AGP_Engine/Utility/Utility.h"
+#include "Graphics/Primitives/Triangle.h"
 
 namespace  AGPEngine
 {
@@ -29,6 +32,25 @@ namespace  AGPEngine
 
         glViewport(0, 0, vpWidth, vpHeight);
 
+        // Init triangle shader
+        triangleShader = Shader(std::filesystem::path(SHADER_DIR).string() + "triangle.vert", std::filesystem::path(SHADER_DIR).string() + "triangle.frag");
+
+        // Init temp vao and vbo
+        glGenVertexArrays(1, &vao);
+        glGenBuffers(1, &vbo);
+
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+        glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex), Triangle::vertices, GL_STATIC_DRAW);
+
+        // Position attribute description and enable
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+        glEnableVertexAttribArray(0);
+
+        // Unbind vao & vbo
+        glBindVertexArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void Renderer::Init()
@@ -42,6 +64,24 @@ namespace  AGPEngine
     void Renderer::Shutdown()
     {
         //TODO: VAO and VBO cleanup here (no leaks)
+    }
+
+    void Renderer::update() {
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glBindVertexArray(vao);
+        glUseProgram(triangleShader.getHandle());
+
+        // Draw triangle
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        m_renderWindow->swapBuffers();
+    }
+
+    void Renderer::destroy() {
+        triangleShader.destroy();
     }
 
     void Renderer::changeContextWindow(Window* win){

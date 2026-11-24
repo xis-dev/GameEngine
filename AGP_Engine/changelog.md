@@ -9,3 +9,5 @@
 
 > **2026-11-23 - 21:00 - 21:30 | David**
 > - Started shaders, added basic shader source loading.
+
+> **2026-11-24 - 18:00 - 21:30 | David**

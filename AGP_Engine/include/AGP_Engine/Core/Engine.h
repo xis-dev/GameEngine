@@ -23,8 +23,9 @@ namespace AGPEngine {
         // Engine has been initialized and is in a valid state to be destroyed
         bool valid{};
 
-        std::unique_ptr<Window> m_window{};
-        std::unique_ptr<Renderer> m_renderer;
+        std::unique_ptr<Window> m_window{nullptr};
+        std::unique_ptr<Renderer> m_renderer{nullptr};
+
 
     };
 }

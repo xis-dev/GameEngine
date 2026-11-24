@@ -1,11 +1,6 @@
-//
-// Created by seer on 11/5/26.
-//
-
 #include "Core/Engine.h"
 #include <iostream>
 #include "SDL3/SDL.h"
-#include <glad/glad.h>
 #include "Graphics/Renderer.h"
 
 
@@ -55,6 +50,7 @@ void AGPEngine::Engine::run() {
     }
 
     bool running = true;
+    // TODO: This goes into input manager when it exists
     SDL_Event event;
 
     while (running) {
@@ -77,18 +73,16 @@ void AGPEngine::Engine::run() {
             }
         }
 
-        glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-      m_window->swapBuffers();
+        m_renderer->update();
     }
 }
 
 void AGPEngine::Engine::cleanup() {
 
-    Renderer::Shutdown();
-    m_window->destroy();
+    //Renderer::Shutdown();
 
+    m_renderer->destroy();
+    m_window->destroy();
     Window::CleanupBackend();
     
 }

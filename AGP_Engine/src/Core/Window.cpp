@@ -14,7 +14,7 @@ bool Window::BackendIsInitialized = false;
 std::expected<Window, Error<Window>> Window::Create(const std::string& title, int w, int h) {
     if (!BackendIsInitialized) {
         if (!SDL_Init(SDL_INIT_VIDEO)) {
-            return std::unexpected{ Error{ .message = std::string("SDL_Init failed: ") + SDL_GetError() } };
+            return std::unexpected{ Error<Window>{ .message = std::string("SDL_Init failed: ") + SDL_GetError() } };
         }
         BackendIsInitialized = true;
     }
@@ -28,13 +28,13 @@ std::expected<Window, Error<Window>> Window::Create(const std::string& title, in
 
     SDL_Window* win = SDL_CreateWindow(title.c_str(), w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
     if (!win) {
-        return std::unexpected{ Error{ .message = std::string("SDL_CreateWindow failed: ") + SDL_GetError() } };
+        return std::unexpected{ Error<Window>{ .message = std::string("SDL_CreateWindow failed: ") + SDL_GetError() } };
     }
 
     SDL_GLContext ctx = SDL_GL_CreateContext(win);
     if (!ctx) {
         SDL_DestroyWindow(win);
-        return std::unexpected{ Error{ .message = std::string("SDL_GL_CreateContext failed: ") + SDL_GetError() } };
+        return std::unexpected{ Error<Window>{ .message = std::string("SDL_GL_CreateContext failed: ") + SDL_GetError() } };
     }
 
     return Window{ win, ctx };

@@ -31,6 +31,14 @@ set(SDL_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(SDL3)
 
+FetchContent_Declare(
+        glm
+        GIT_TAG 1.0.3
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+)
+
+FetchContent_MakeAvailable(glm)
+
 set(GLAD_DIR ${PROJECT_SOURCE_DIR}/external_deps/glad)
 
 set(DEPS_DIRS
@@ -46,7 +54,8 @@ set(PROJECT_SOURCES
         src/Core/Level.cpp
         src/Resources/ResourceManager.cpp
         src/Resources/Shader.cpp
-        include/AGP_Engine/Resources/Shader.h)
+        include/AGP_Engine/Resources/Shader.h
+)
 
 add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
@@ -54,6 +63,7 @@ add_library(AGP_Engine STATIC
 
 target_compile_definitions(AGP_Engine PRIVATE
         $<$<CONFIG:Debug>:DEBUG>
+        SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/shaders/"
 )
 
 target_include_directories(AGP_Engine PUBLIC
@@ -66,4 +76,5 @@ target_include_directories(AGP_Engine PRIVATE include/AGP_Engine)
 target_link_libraries(AGP_Engine PRIVATE
         box2d::box2d
         SDL3::SDL3-static
+        glm::glm
 )
