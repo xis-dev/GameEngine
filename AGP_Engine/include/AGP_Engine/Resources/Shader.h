@@ -1,6 +1,4 @@
 #pragma once
-#include <expected>
-#include <GLES2/gl2.h>
 
 #include "Resource.h"
 #include "Utility/Utility.h"
@@ -40,9 +38,7 @@ namespace AGPEngine {
         // TODO: Actual shaders as resources, this is a quick ver to get it up
         Shader(const std::string& vert, const std::string& frag);
 
-        void use() const {
-            glUseProgram(m_handle);
-        }
+        void use() const;
 
         void destroy() override;
 

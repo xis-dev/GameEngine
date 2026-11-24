@@ -68,6 +68,10 @@ namespace AGPEngine {
 
     }
 
+    void Shader::use() const {
+        glUseProgram(m_handle);
+    }
+
     void Shader::destroy() {
         if (m_handle != InvalidHandle) {
             glDeleteProgram(m_handle);
