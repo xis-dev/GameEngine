@@ -13,7 +13,7 @@ struct Quad {
 
     static constexpr std::array<uint32_t, 6> indices = {
         0, 1, 2,
-        3, 2, 1
+        3, 0, 2
     };
 };
 
