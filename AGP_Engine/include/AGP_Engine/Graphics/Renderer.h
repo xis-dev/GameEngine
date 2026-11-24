@@ -26,7 +26,7 @@ namespace AGPEngine {
 
 
         // Temporary variables
-        uint32_t vao, vbo;
+        uint32_t vao, vbo, ebo;
         Shader triangleShader{};
     };
 }

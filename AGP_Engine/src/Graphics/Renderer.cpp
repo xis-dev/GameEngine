@@ -9,6 +9,7 @@
 #include <glad/glad.h>
 #include <iostream>
 #include "AGP_Engine/Utility/Utility.h"
+#include "Graphics/Primitives/Quad.h"
 #include "Graphics/Primitives/Triangle.h"
 
 namespace  AGPEngine
@@ -38,11 +39,15 @@ namespace  AGPEngine
         // Init temp vao and vbo
         glGenVertexArrays(1, &vao);
         glGenBuffers(1, &vbo);
+        glGenBuffers(1, &ebo);
 
         glBindVertexArray(vao);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-        glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(Vertex), Triangle::vertices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, Quad::vertices.size() * sizeof(Vertex), Quad::vertices.data(), GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Quad::indices.size() * sizeof(uint32_t), Quad::indices.data(), GL_STATIC_DRAW);
 
         // Position attribute description and enable
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
@@ -51,6 +56,7 @@ namespace  AGPEngine
         // Unbind vao & vbo
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void Renderer::Init()
@@ -75,12 +81,16 @@ namespace  AGPEngine
         glUseProgram(triangleShader.getHandle());
 
         // Draw triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, Quad::indices.size(), GL_UNSIGNED_INT, nullptr);
 
         m_renderWindow->swapBuffers();
     }
 
     void Renderer::destroy() {
+        glDeleteVertexArrays(1, &vao);
+        glDeleteBuffers(1, &vbo);
+        glDeleteBuffers(1, &ebo);
+
         triangleShader.destroy();
     }
 
