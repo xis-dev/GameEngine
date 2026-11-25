@@ -61,6 +61,8 @@ add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
         ${PROJECT_SOURCES})
 
+
+
 target_compile_definitions(AGP_Engine PRIVATE
         $<$<CONFIG:Debug>:DEBUG>
         SHADER_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/shaders/"
@@ -73,7 +75,7 @@ target_include_directories(AGP_Engine PUBLIC
 
 target_include_directories(AGP_Engine PRIVATE include/AGP_Engine)
 
-target_link_libraries(AGP_Engine PRIVATE
+target_link_libraries(AGP_Engine PUBLIC
         box2d::box2d
         SDL3::SDL3-static
         glm::glm
