@@ -19,7 +19,7 @@ std::expected<Window, Error<Window>> Window::Create(const std::string& title, in
         BackendIsInitialized = true;
     }
 
-    // Request GL 3.3 Core BEFORE window creation
+    // Request GL 4.3 Core BEFORE window creation
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -55,7 +55,11 @@ void Window::swapBuffers() const  { SDL_GL_SwapWindow(m_sdlWindow); }
 void Window::getSize(int& w, int& h) const { SDL_GetWindowSize(m_sdlWindow, &w, &h); }
 
 void Window::setVsync(bool on) {
-    SDL_GL_SetSwapInterval(on);   // vsync
+    // Only matters if it's the current context
+    if (m_glContext == SDL_GL_GetCurrentContext()) {
+        SDL_GL_SetSwapInterval(on);   // vsync
+    }
+
 }
 
 bool Window::isValid() const { return m_sdlWindow != nullptr;}
