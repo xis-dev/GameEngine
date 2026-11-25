@@ -1,6 +1,5 @@
 
 #include "AGP_Engine/Core/Engine.h"
-
 #include <iostream>
 
 int main() {

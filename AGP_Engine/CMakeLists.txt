@@ -45,8 +45,7 @@ set(DEPS_DIRS
         ${GLAD_DIR})
 
 set(DEPS_SOURCES
-        ${GLAD_DIR}/glad.c
-        src/Math/Vector2.h)
+        ${GLAD_DIR}/glad.c)
 
 set(PROJECT_SOURCES
         src/Core/Engine.cpp
@@ -56,13 +55,15 @@ set(PROJECT_SOURCES
         src/Resources/ResourceManager.cpp
         src/Resources/Shader.cpp
         include/AGP_Engine/Resources/Shader.h
-        src/Math/Vector2.h
+        include/AGP_Engine/Core/ECS/Entity.cpp
+        include/AGP_Engine/Core/ECS/Entity.h
+        include/AGP_Engine/Core/ECS/Components/TransformComponent.h
+        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.h
 )
 
 add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
-        ${PROJECT_SOURCES}
-        src/Math/Vector2.h)
+        ${PROJECT_SOURCES})
 
 
 
