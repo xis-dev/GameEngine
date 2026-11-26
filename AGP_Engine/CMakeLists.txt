@@ -46,7 +46,10 @@ set(DEPS_DIRS
         ${GLAD_DIR})
 
 set(DEPS_SOURCES
-        ${GLAD_DIR}/glad.c)
+        ${GLAD_DIR}/glad.c
+        include/AGP_Engine/Core/ECS/Components/Animator.h
+        include/AGP_Engine/Core/ECS/Components/Animator.cpp
+        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp)
 
 set(PROJECT_SOURCES
         src/Core/Engine.cpp
@@ -64,11 +67,17 @@ set(PROJECT_SOURCES
         include/AGP_Engine/Graphics/GLObjects.h
         src/Graphics/GLObjects.cpp
         src/Graphics/QuadMesh.cpp
+        include/AGP_Engine/Core/ECS/Components/Animator.h
+        include/AGP_Engine/Core/ECS/Components/Animator.cpp
+        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp
 )
 
 add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
-        ${PROJECT_SOURCES})
+        ${PROJECT_SOURCES}
+        include/AGP_Engine/Core/ECS/Components/Animator.h
+        include/AGP_Engine/Core/ECS/Components/Animator.cpp
+        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp)
 
 
 

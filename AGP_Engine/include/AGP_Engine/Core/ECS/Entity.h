@@ -61,6 +61,7 @@ namespace AGPEngine {
         }
 
         virtual void update(float deltaTime);
+        virtual void destory();
 
     private:
         // Temporary unordered map, just want this up for SpriteRenderer component to be started
