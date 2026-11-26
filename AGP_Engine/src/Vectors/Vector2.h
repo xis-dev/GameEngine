@@ -33,6 +33,8 @@ float x, y = 0.0f;
             return Vector2(x / rhs.x, y / rhs.y);
         }
 
+
+
     };
 
 }

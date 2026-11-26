@@ -5,7 +5,6 @@
 
 
 
-
 AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
 
     if (!init(winWidth, winHeight, winTitle)) {
