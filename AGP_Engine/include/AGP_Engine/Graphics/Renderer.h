@@ -2,6 +2,7 @@
 
 #include "AGP_Engine/Core/Window.h"
 #include "AGP_Engine/Resources/Shader.h"
+#include "Primitives/QuadMesh.h"
 
 namespace AGPEngine {
 
@@ -26,7 +27,7 @@ namespace AGPEngine {
 
 
         // Temporary variables
-        uint32_t vao, vbo, ebo;
-        Shader triangleShader{};
+        std::unique_ptr<QuadMesh> m_spriteMesh {nullptr};
+        Shader m_spriteShader{};
     };
 }
