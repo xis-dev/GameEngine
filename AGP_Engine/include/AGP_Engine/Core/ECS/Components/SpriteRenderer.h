@@ -18,10 +18,14 @@ namespace AGPEngine {
         SpriteRenderer(Shader &shader);
         ~SpriteRenderer();
 
+
+        GLuint loadTexture(char* filename);
+
         void DrawSprite(auto &texture, glm::vec2 position,
             glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f,
             glm::vec3 color = glm::
             vec3(1.0f));
+
     private:
         Shader       shader;
         unsigned int quadVAO;
@@ -34,10 +38,10 @@ namespace AGPEngine {
     {
 
 
-        Animator(Shader &shader, SpriteRenderer renderer, int width, int height);
+        Animator(Shader &shader, SpriteRenderer renderer, int width, int height, int fps);
         ~Animator();
 
-
+    virtual void update(float deltaTime);
 
     };
 

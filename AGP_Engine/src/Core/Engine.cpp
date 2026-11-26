@@ -4,8 +4,8 @@
 #include "Graphics/Renderer.h"
 
 
-
-AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
+using namespace AGPEngine;
+Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool runOnInit) {
 
     if (!init(winWidth, winHeight, winTitle)) {
         return;
@@ -15,13 +15,13 @@ AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTit
 
 }
 
-AGPEngine::Engine::~Engine() {
+Engine::~Engine() {
     if (valid) {
         cleanup();
     }
 }
 
-bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
+bool Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
 
     auto win = Window::Create(winTitle, winWidth, winHeight);
     if (!win) {
@@ -41,7 +41,7 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
    
 }
 
-void AGPEngine::Engine::run() {
+void Engine::run() {
 
     if (!valid) {
         std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state! It likely has not been initialized or failed to initialize.\n";
@@ -76,7 +76,7 @@ void AGPEngine::Engine::run() {
     }
 }
 
-void AGPEngine::Engine::cleanup() {
+void Engine::cleanup() {
 
     //Renderer::Shutdown();
 
@@ -86,4 +86,4 @@ void AGPEngine::Engine::cleanup() {
     
 }
 
-bool AGPEngine::Engine::isValid() const { return valid; }
+bool Engine::isValid() const { return valid; }
