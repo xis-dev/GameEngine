@@ -18,10 +18,8 @@ Entity::Entity(bool addTransform)
 
 void Entity::update(float deltaTime)
 {
-
     while (isAlive)
     {
-    //Update logic
 
 
     };

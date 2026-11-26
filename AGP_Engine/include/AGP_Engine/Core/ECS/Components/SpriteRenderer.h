@@ -31,17 +31,5 @@ namespace AGPEngine {
 
     };
 
-    class Animator: public Component
-    {
-
-
-        Animator(Shader &shader, SpriteRenderer renderer, int width, int height, int fps);
-        ~Animator();
-
-    virtual void update(float deltaTime);
-
-    };
-
-
 }
 

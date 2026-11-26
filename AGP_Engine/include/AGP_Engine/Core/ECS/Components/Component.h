@@ -41,6 +41,10 @@ namespace AGPEngine {
         }
         virtual ~Component() = default;
 
+        virtual void onBegin() {}
+        virtual void update(float deltaTime) {}
+        virtual void onDestroy() {}
+
     private:
         static ComponentID nextID;
     };

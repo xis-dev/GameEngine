@@ -16,6 +16,7 @@ namespace AGPEngine {
         glm::vec3 rotation{};
 
     public:
+        Transform() = default;
         const glm::vec3& getPosition() const {return m_position;}
         const glm::vec3& getScale() const {return scale;}
         const glm::vec3& getRotation() const {return rotation;}

@@ -67,6 +67,8 @@ namespace AGPEngine {
         // Temporary unordered map, just want this up for SpriteRenderer component to be started
         std::unordered_map<ComponentID, Component> m_components{};
 
+        bool isAlive{};
+
     };
 
 }
