@@ -1,4 +1,3 @@
-// src/Core/Window.cpp
 #include "Core/Window.h"
 #include <SDL3/SDL.h>
 #include <iostream>
@@ -65,8 +64,14 @@ void Window::setVsync(bool on) {
 bool Window::isValid() const { return m_sdlWindow != nullptr;}
 
 void Window::destroy() {
-    if (m_glContext) SDL_GL_DestroyContext(m_glContext);
-    if (m_sdlWindow) SDL_DestroyWindow(m_sdlWindow);
+    if (m_glContext) {
+        SDL_GL_DestroyContext(m_glContext);
+        m_glContext = nullptr;
+    }
+    if (m_sdlWindow) {
+        SDL_DestroyWindow(m_sdlWindow);
+        m_sdlWindow = nullptr;
+    }
 }
 
 Window::~Window() {

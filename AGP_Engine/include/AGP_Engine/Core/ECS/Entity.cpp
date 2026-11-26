@@ -6,6 +6,11 @@
 
 AGPEngine::Entity::Entity(bool addTransform) {
     if (addTransform) {
-        m_transform = addComponent<Transform>();
+        transform = addComponent<Transform>();
     }
 }
+
+void AGPEngine::Entity::update(float deltaTime) {
+
+}
+

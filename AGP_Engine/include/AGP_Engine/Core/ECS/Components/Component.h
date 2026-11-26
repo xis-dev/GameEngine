@@ -44,8 +44,8 @@ namespace AGPEngine {
     private:
         static ComponentID nextID;
     };
-    ComponentID Component::nextID = 0;
 
+    inline ComponentID Component::nextID = 0;
 }
 
 

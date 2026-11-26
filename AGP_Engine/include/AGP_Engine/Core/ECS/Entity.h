@@ -20,6 +20,9 @@ namespace AGPEngine {
         explicit Entity(bool addTransform = true);
 
     public:
+        virtual ~Entity() = default;
+
+        Transform* transform{nullptr};
 
         template <typename C, typename... Args>
         requires std::derived_from<C, Component> &&
@@ -62,7 +65,6 @@ namespace AGPEngine {
         // Temporary unordered map, just want this up for SpriteRenderer component to be started
         std::unordered_map<ComponentID, Component> m_components{};
 
-        Transform* m_transform{nullptr};
     };
 
 }

@@ -26,6 +26,5 @@ namespace AGPEngine {
         std::unique_ptr<Window> m_window{nullptr};
         std::unique_ptr<Renderer> m_renderer{nullptr};
 
-
     };
 }
