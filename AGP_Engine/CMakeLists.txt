@@ -60,6 +60,10 @@ set(PROJECT_SOURCES
         include/AGP_Engine/Core/ECS/Entity.h
         include/AGP_Engine/Core/ECS/Components/TransformComponent.h
         include/AGP_Engine/Core/ECS/Components/SpriteRenderer.h
+        include/AGP_Engine/Graphics/Primitives/QuadMesh.h
+        include/AGP_Engine/Graphics/GLObjects.h
+        src/Graphics/GLObjects.cpp
+        src/Graphics/QuadMesh.cpp
 )
 
 add_library(AGP_Engine STATIC

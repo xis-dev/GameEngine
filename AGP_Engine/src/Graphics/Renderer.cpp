@@ -34,29 +34,8 @@ namespace  AGPEngine
         glViewport(0, 0, vpWidth, vpHeight);
 
         // Init triangle shader
-        triangleShader = Shader(std::filesystem::path(SHADER_DIR).string() + "triangle.vert", std::filesystem::path(SHADER_DIR).string() + "triangle.frag");
-
-        // Init temp vao and vbo
-        glGenVertexArrays(1, &vao);
-        glGenBuffers(1, &vbo);
-        glGenBuffers(1, &ebo);
-
-        glBindVertexArray(vao);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, Quad::vertices.size() * sizeof(Vertex), Quad::vertices.data(), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, Quad::indices.size() * sizeof(uint32_t), Quad::indices.data(), GL_STATIC_DRAW);
-
-        // Position attribute description and enable
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
-        glEnableVertexAttribArray(0);
-
-        // Unbind vao & vbo
-        glBindVertexArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "triangle.vert", std::filesystem::path(SHADER_DIR).string() + "triangle.frag");
+        m_spriteMesh = std::make_unique<QuadMesh>();
     }
 
     void Renderer::Init()
@@ -77,21 +56,16 @@ namespace  AGPEngine
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBindVertexArray(vao);
-        glUseProgram(triangleShader.getHandle());
+        glUseProgram(m_spriteShader.getHandle());
 
-        // Draw triangle
-        glDrawElements(GL_TRIANGLES, Quad::indices.size(), GL_UNSIGNED_INT, nullptr);
-
+        m_spriteMesh->draw();
         m_renderWindow->swapBuffers();
     }
 
     void Renderer::destroy() {
-        glDeleteVertexArrays(1, &vao);
-        glDeleteBuffers(1, &vbo);
-        glDeleteBuffers(1, &ebo);
 
-        triangleShader.destroy();
+        m_spriteMesh->destroy();
+        m_spriteShader.destroy();
     }
 
     void Renderer::changeContextWindow(Window* win){

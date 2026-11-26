@@ -15,5 +15,8 @@ struct Quad {
         0, 1, 2,
         3, 0, 2
     };
+
+    static constexpr uint32_t IndexSize = sizeof(indices[0]) * indices.size();
+    static constexpr uint32_t VertexSize = sizeof(vertices[0]) * vertices.size();
 };
 
