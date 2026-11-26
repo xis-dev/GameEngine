@@ -2,6 +2,7 @@
 
 #include "AGP_Engine/Core/Window.h"
 #include "AGP_Engine/Resources/Shader.h"
+#include "AGP_Engine/Core/Level.h"
 #include "Primitives/QuadMesh.h"
 
 namespace AGPEngine {
@@ -15,8 +16,7 @@ namespace AGPEngine {
         static void Init();
         static void Shutdown();
 
-
-        void update();
+        void render(const Level& level);
         void destroy();
         void changeContextWindow(Window* win);
 
@@ -29,5 +29,11 @@ namespace AGPEngine {
         // Temporary variables
         std::unique_ptr<QuadMesh> m_spriteMesh {nullptr};
         Shader m_spriteShader{};
+        // Cached so we dont constantly need to get location every frame
+        uint32_t modelMatrixSSBOLocation{};
+        // Cached so we can avoid rebuilding the ssbo every frame, only when its more or less
+        uint32_t lastRenderCount{};
+        uint32_t ssbo{};
+        std::vector<glm::mat4> modelMatrices{};
     };
 }

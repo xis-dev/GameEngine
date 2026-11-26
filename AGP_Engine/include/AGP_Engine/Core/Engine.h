@@ -14,7 +14,7 @@ namespace AGPEngine {
         ~Engine();
 
         bool init(int winWidth, int winHeight, const std::string &winTitle);
-        void run();
+        void run(const Level &level);
         void cleanup();
 
         [[nodiscard]] bool isValid() const;

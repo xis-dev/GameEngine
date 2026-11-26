@@ -20,6 +20,8 @@ namespace AGPEngine {
         Level& operator=(Level&& l) noexcept = default;
 
         Entity* createEntity();
+
+        const std::vector<std::unique_ptr<Entity>>& getEntities() const {return m_entities;}
     private:
         std::vector<std::unique_ptr<Entity>> m_entities{};
     };

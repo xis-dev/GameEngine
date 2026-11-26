@@ -2,13 +2,13 @@
 // Created by seer on 11/5/26.
 //
 
-
 #include "../../include/AGP_Engine/Graphics/Renderer.h"
 
 #include <filesystem>
 #include <glad/glad.h>
 #include <iostream>
 #include "AGP_Engine/Utility/Utility.h"
+#include "Core/ECS/Components/SpriteRenderer.h"
 #include "Graphics/Primitives/Quad.h"
 #include "Graphics/Primitives/Triangle.h"
 
@@ -36,6 +36,15 @@ namespace  AGPEngine
         // Init triangle shader
         m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "triangle.vert", std::filesystem::path(SHADER_DIR).string() + "triangle.frag");
         m_spriteMesh = std::make_unique<QuadMesh>();
+
+        // TODO: Temp ssbo generation
+        glGenBuffers(1, &ssbo);
+
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+        m_spriteShader.use();
     }
 
     void Renderer::Init()
@@ -51,14 +60,32 @@ namespace  AGPEngine
         //TODO: VAO and VBO cleanup here (no leaks)
     }
 
-    void Renderer::update() {
+    void Renderer::render(const Level& level) {
 
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(m_spriteShader.getHandle());
 
-        m_spriteMesh->draw();
+        int renderInstance = 0;
+        for (const auto& ent: level.getEntities()) {
+
+            if (ent->hasComponent<Transform>() && ent->hasComponent<SpriteRenderer>()) {
+                modelMatrices.push_back(ent->transform->getTransform());
+            }
+
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+            glBufferData(GL_SHADER_STORAGE_BUFFER, modelMatrices.size() * sizeof(glm::mat4), modelMatrices.data(), GL_DYNAMIC_DRAW);
+
+            m_spriteMesh->draw();
+            // TODO: Change this, probably cache sprite renderer entities
+            // if (lastRenderCount < level.getEntities().size()) {
+            //     lastRenderCount = level.getEntities().size();
+            //
+            //
+            // }
+        }
+
         m_renderWindow->swapBuffers();
     }
 

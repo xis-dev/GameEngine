@@ -34,7 +34,8 @@ namespace AGPEngine {
                 std::cout << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition.\n";
             }
             m_components[Component::GetID<C>()] = C(std::forward<Args>(args)...);
-            return dynamic_cast<C*>(&m_components[Component::GetID<C>()]);
+            C* trans = static_cast<C*>(&m_components[Component::GetID<C>()]);
+            return static_cast<C*>(&m_components[Component::GetID<C>()]);
         }
 
         template <typename C>

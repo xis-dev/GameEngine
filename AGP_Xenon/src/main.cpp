@@ -8,9 +8,6 @@
 static void BuildLevel()
 {
 
-    AGPEngine::Level testLevel{};
-    auto* testEnt = testLevel.createEntity();
-    testEnt->addComponent<AGPEngine::SpriteRenderer>();
 
 }
 
@@ -18,8 +15,11 @@ static void BuildLevel()
 int main() {
     AGPEngine::Engine e{500, 500, "AGPEngine", false};
 
-    BuildLevel();
-    e.run();
+//    BuildLevel();
+    AGPEngine::Level testLevel{};
+    auto* testEnt = testLevel.createEntity();
+    testEnt->addComponent<AGPEngine::SpriteRenderer>();
+    e.run(testLevel);
 
 }
 

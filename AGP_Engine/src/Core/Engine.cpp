@@ -11,7 +11,7 @@ AGPEngine::Engine::Engine(int winWidth, int winHeight, const std::string &winTit
         return;
     }
 
-    if (runOnInit) { run(); }
+    //if (runOnInit) { run(TODO); }
 
 }
 
@@ -41,7 +41,7 @@ bool AGPEngine::Engine::init(int winWidth, int winHeight, const std::string &win
    
 }
 
-void AGPEngine::Engine::run() {
+void AGPEngine::Engine::run(const Level &level) {
 
     if (!valid) {
         std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state! It likely has not been initialized or failed to initialize.\n";
@@ -72,7 +72,7 @@ void AGPEngine::Engine::run() {
             }
         }
 
-        m_renderer->update();
+        m_renderer->render(level);
     }
 }
 
