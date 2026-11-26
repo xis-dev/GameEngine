@@ -4,13 +4,16 @@
 
 #include "Entity.h"
 
-AGPEngine::Entity::Entity(bool addTransform) {
-    if (addTransform) {
+AGPEngine::Entity::Entity(bool addTransform)
+{
+    if (addTransform)
+    {
         transform = addComponent<Transform>();
     }
 }
 
-void AGPEngine::Entity::update(float deltaTime) {
+void AGPEngine::Entity::update(float deltaTime)
+{
 
 }
 

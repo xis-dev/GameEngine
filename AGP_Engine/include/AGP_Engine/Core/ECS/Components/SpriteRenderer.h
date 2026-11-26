@@ -1,13 +1,36 @@
 #pragma once
 
+#include <cstdio>
+
 #include "Component.h"
+#include "Entity.h"
+#include "Renderer.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
+#include "Graphics/Renderer.h"
+#include "stb_image/stb_image.h"
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_opengl.h"
 
 namespace AGPEngine {
-    struct SpriteRenderer: public Component {
+
+    class SpriteRenderer: public Component {
+    public:
+        SpriteRenderer(Shader &shader);
+        ~SpriteRenderer();
+
+        void DrawSprite(auto &texture, glm::vec2 position,
+            glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f,
+            glm::vec3 color = glm::
+            vec3(1.0f));
+    private:
+        Shader       shader;
+        unsigned int quadVAO;
+
+        void initRenderData();
 
     };
 
-    struct Animator: public Component {
-        //Animator(SpriteRenderer* renderer);
-    };
+
 }
+
