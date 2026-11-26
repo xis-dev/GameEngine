@@ -3,8 +3,6 @@
 #include <cstdio>
 
 #include "Component.h"
-#include "Entity.h"
-#include "Renderer.h"
 #include "glm/vec2.hpp"
 #include "glm/vec3.hpp"
 #include "Graphics/Renderer.h"
@@ -14,7 +12,8 @@
 
 namespace AGPEngine {
 
-    class SpriteRenderer: public Component {
+    class SpriteRenderer: public Component
+    {
     public:
         SpriteRenderer(Shader &shader);
         ~SpriteRenderer();
@@ -28,6 +27,17 @@ namespace AGPEngine {
         unsigned int quadVAO;
 
         void initRenderData();
+
+    };
+
+    class Animator: public Component
+    {
+
+
+        Animator(Shader &shader, SpriteRenderer renderer, int width, int height);
+        ~Animator();
+
+
 
     };
 

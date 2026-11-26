@@ -4,7 +4,11 @@
 
 #include "Entity.h"
 
-AGPEngine::Entity::Entity(bool addTransform)
+using namespace AGPEngine;
+static bool isAlive = true;
+
+
+Entity::Entity(bool addTransform)
 {
     if (addTransform)
     {
@@ -12,8 +16,23 @@ AGPEngine::Entity::Entity(bool addTransform)
     }
 }
 
-void AGPEngine::Entity::update(float deltaTime)
+void Entity::update(float deltaTime)
 {
 
+    while (isAlive)
+    {
+    //Update logic
+
+
+    };
 }
+
+void Entity::destory()
+{
+isAlive = false;
+    //TODO: Clean class from memory
+}
+
+
+
 
