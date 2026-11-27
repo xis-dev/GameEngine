@@ -2,6 +2,9 @@
 #include <concepts>
 #include <cstdint>
 
+#include "Core/ECS/Entity.h"
+#include "Core/ECS/Entity.h"
+
 // TODO: Actual ECS, using map of components for now
 // Specialized template def takes priority
 // #define AGP_ENGINE_REGISTER_COMPONENT(x) \
@@ -28,8 +31,12 @@
 // }
 
 namespace AGPEngine {
+    class Entity;
     using ComponentID = uint32_t;
     struct Component {
+
+
+    Entity* owner{nullptr};
 
         template <typename C>
         requires std::derived_from<C, Component>

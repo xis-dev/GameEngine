@@ -6,5 +6,11 @@ layout (location = 0) in vec3 vFragPos;
 layout (location = 1) in vec2 vUV;
 
 void main() {
-    oFragColour = vec4(vFragPos, 1.0);
+
+    //TODO: Swap with acctual textures.
+    oFragColour = vec4(vUV, 0.5, 1.0);
+
+
+    //Did you mean vFragColour?
+    //oFragColour = vec4(vFragPos, 1.0);
 }

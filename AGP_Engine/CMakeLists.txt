@@ -67,6 +67,9 @@ set(PROJECT_SOURCES
         include/AGP_Engine/Graphics/GLObjects.h
         src/Graphics/GLObjects.cpp
         src/Graphics/QuadMesh.cpp
+        src/Graphics/QuadMesh.cpp
+        include/AGP_Engine/Graphics/Camera2D.h
+        src/Graphics/Camera2D.cpp
         include/AGP_Engine/Core/ECS/Components/Animator.h
         src/Core/ECS/Components/Animator.cpp
         src/Core/ECS/Components/SpriteRenderer.cpp
