@@ -5,6 +5,7 @@
 #include "AGP_Engine/Core/Level.h"
 #include "AGP_Engine/Core/ECS/Components/SpriteRenderer.h"
 
+
 struct TestComponent: public AGPEngine::Component {
 
     TestComponent(float testParams);
@@ -53,12 +54,11 @@ void BasicLevel::update(float deltaTime) {
     Level::update(deltaTime);
 }
 
-int main() {
-    AGPEngine::Engine e{500, 500, "AGPEngine", false};
+void AGPEngine::createGame() {
+   Engine e{500, 500, "AGPEngine", false};
 
     BasicLevel testLevel{};
     e.run(testLevel);
-
 }
 
 

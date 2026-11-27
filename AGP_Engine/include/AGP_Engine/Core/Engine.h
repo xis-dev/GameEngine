@@ -6,6 +6,11 @@
 #include "Window.h"
 #include "AGP_Engine/Graphics/Renderer.h"
 
+namespace AGPEngine{
+    // Start point
+    void createGame();
+}
+
 namespace AGPEngine {
     class Engine {
 

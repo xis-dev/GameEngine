@@ -38,10 +38,10 @@ namespace  AGPEngine
         m_spriteMesh = std::make_unique<QuadMesh>();
 
         // TODO: Temp ssbo generation
-        ssbo = GLBufferObject::Create();
+        m_modelMatrixSSBO = GLBufferObject::Create();
 
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.getHandle());
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo.getHandle());
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_modelMatrixSSBO.getHandle());
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_modelMatrixSSBO.getHandle());
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
         m_spriteShader.use();
@@ -72,17 +72,17 @@ namespace  AGPEngine
 
             if (ent->hasComponent<Transform>() && ent->hasComponent<SpriteRenderer>()) {
                 // Only push back once there's too many instances to render
-                if (renderInstance >= modelMatrices.size()) {
-                    modelMatrices.push_back(ent->transform->getTransform());
+                if (renderInstance >= m_modelMatrices.size()) {
+                    m_modelMatrices.push_back(ent->transform->getTransform());
                 }
                 else {
-                   modelMatrices[renderInstance] = ent->transform->getTransform();
+                   m_modelMatrices[renderInstance] = ent->transform->getTransform();
                 }
                 ++renderInstance;
             }
 
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.getHandle());
-            glBufferData(GL_SHADER_STORAGE_BUFFER, modelMatrices.size() * sizeof(glm::mat4), modelMatrices.data(), GL_DYNAMIC_DRAW);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_modelMatrixSSBO.getHandle());
+            glBufferData(GL_SHADER_STORAGE_BUFFER, m_modelMatrices.size() * sizeof(glm::mat4), m_modelMatrices.data(), GL_DYNAMIC_DRAW);
 
             m_spriteMesh->draw();
             // TODO: Change this, probably cache sprite renderer entities

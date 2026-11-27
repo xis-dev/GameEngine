@@ -30,10 +30,9 @@ namespace AGPEngine {
         std::unique_ptr<QuadMesh> m_spriteMesh {nullptr};
         Shader m_spriteShader{};
         // Cached so we dont constantly need to get location every frame
-        uint32_t modelMatrixSSBOLocation{};
+        uint32_t m_modelMatrixSSBOLocation{};
         // Cached so we can avoid rebuilding the ssbo every frame, only when its more or less
-        uint32_t lastRenderCount{};
-        GLBufferObject ssbo{};
-        std::vector<glm::mat4> modelMatrices{};
+        GLBufferObject m_modelMatrixSSBO{};
+        std::vector<glm::mat4> m_modelMatrices{};
     };
 }
