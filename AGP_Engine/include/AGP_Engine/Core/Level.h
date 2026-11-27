@@ -27,18 +27,28 @@ namespace AGPEngine {
         const std::vector<std::unique_ptr<Entity>>& getEntities() const {return m_entities;}
 
         // TODO: Gets changed to delegate
-        virtual void onBegin() {
+        virtual void onGameBegin() {
             for (const auto& entity: m_entities) {
                 entity->begin();
             }
         }
+
+        //virtual void updateBegin();
+
         virtual void update(float deltaTime) {
             for (const auto& ent: m_entities) {
                 ent->update(deltaTime);
             }
         }
+
+        // TODO: Consider if this should be overridable or not, its mainly to actually remove entities that are to be destroyed
+        void updateEnd();
+
+        void destroyEntity(Entity* entity);
     private:
         std::vector<std::unique_ptr<Entity>> m_entities{};
         std::unordered_map<std::string, Entity*> m_namedEntities{};
+        std::vector<Entity*> m_entitiesToBeDestroyed{};
+        //std::unordered_map<std::iterator<>>
     };
 }

@@ -63,11 +63,14 @@ namespace AGPEngine {
         virtual void update(float deltaTime);
         virtual void destroy();
 
+        bool isAlive() const;
+
     private:
         // Temporary unordered map, just want this up for SpriteRenderer component to be started
         std::unordered_map<ComponentID, std::unique_ptr<Component>> m_components{};
 
-        bool isAlive{};
+        bool m_alive{};
+        bool m_toBeDestroyed{};
 
     };
 

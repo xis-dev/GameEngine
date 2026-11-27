@@ -52,7 +52,7 @@ void Engine::run(Level& level) {
     // TODO: This goes into input manager when it exists
     SDL_Event event;
 
-    level.onBegin();
+    level.onGameBegin();
     while (running) {
 
         // SDL Event handling
@@ -75,6 +75,8 @@ void Engine::run(Level& level) {
 
         level.update(0.1f);
         m_renderer->render(level);
+
+        level.updateEnd();
     }
 }
 

@@ -15,9 +15,11 @@ Entity::Entity(bool addTransform)
     {
         transform = addComponent<Transform>();
     }
+    m_alive = true;
 }
 
 void Entity::begin() {
+    if (!m_alive) return;
     for (const auto& component: m_components | std::ranges::views::values) {
         component->onBegin();
     }
@@ -25,6 +27,7 @@ void Entity::begin() {
 
 void Entity::update(float deltaTime)
 {
+    if (!m_alive) return;
     for (const auto& component: m_components | std::ranges::views::values) {
        component->update(deltaTime);
     }
@@ -32,8 +35,12 @@ void Entity::update(float deltaTime)
 
 void Entity::destroy()
 {
-isAlive = false;
+    m_alive = false;
     //TODO: Clean class from memory
+}
+
+bool Entity::isAlive() const {
+    return m_alive;
 }
 
 

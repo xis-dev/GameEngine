@@ -36,22 +36,23 @@ void TestComponent::onDestroy() {
 class BasicLevel: public AGPEngine::Level {
 
 public:
-    void onBegin() override;
+    void onGameBegin() override;
     void update(float deltaTime) override;
 };
 
 
-void BasicLevel::onBegin() {
+void BasicLevel::onGameBegin() {
     createEntity("basic");
     auto* basicEnt = getEntity("basic");
     basicEnt->addComponent<AGPEngine::SpriteRenderer>();
     basicEnt->addComponent<TestComponent>(1.0f);
 
-    Level::onBegin();
+    Level::onGameBegin();
 }
 
 void BasicLevel::update(float deltaTime) {
     Level::update(deltaTime);
+//    if (auto* ent = getEntity("basic")) ent->destroy();
 }
 
 void AGPEngine::createGame() {
