@@ -34,14 +34,14 @@ namespace  AGPEngine
         glViewport(0, 0, vpWidth, vpHeight);
 
         // Init triangle shader
-        m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "triangle.vert", std::filesystem::path(SHADER_DIR).string() + "triangle.frag");
+        m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "quad.vert", std::filesystem::path(SHADER_DIR).string() + "textured_quad.frag");
         m_spriteMesh = std::make_unique<QuadMesh>();
 
         // TODO: Temp ssbo generation
-        glGenBuffers(1, &ssbo);
+        ssbo = GLBufferObject::Create();
 
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.getHandle());
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo.getHandle());
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
         m_spriteShader.use();
@@ -71,10 +71,17 @@ namespace  AGPEngine
         for (const auto& ent: level.getEntities()) {
 
             if (ent->hasComponent<Transform>() && ent->hasComponent<SpriteRenderer>()) {
-                modelMatrices.push_back(ent->transform->getTransform());
+                // Only push back once there's too many instances to render
+                if (renderInstance >= modelMatrices.size()) {
+                    modelMatrices.push_back(ent->transform->getTransform());
+                }
+                else {
+                   modelMatrices[renderInstance] = ent->transform->getTransform();
+                }
+                ++renderInstance;
             }
 
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo.getHandle());
             glBufferData(GL_SHADER_STORAGE_BUFFER, modelMatrices.size() * sizeof(glm::mat4), modelMatrices.data(), GL_DYNAMIC_DRAW);
 
             m_spriteMesh->draw();

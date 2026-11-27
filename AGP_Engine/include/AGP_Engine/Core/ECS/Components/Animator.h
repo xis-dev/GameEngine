@@ -11,13 +11,13 @@
 #include "SDL3/SDL_opengl.h"
 
 namespace AGPEngine {
-    class Animator: public Component
-    {
-        Animator(Shader &shader, SpriteRenderer renderer, int width, int height, int fps);
-        ~Animator();
-
-    public:
-        void update(float deltaTime) override;
-
-    };
+    // class Animator: public Component
+    // {
+    //     Animator(Shader &shader, SpriteRenderer renderer, int width, int height, int fps);
+    //     ~Animator();
+    //
+    // public:
+    //     void update(float deltaTime) override;
+    //
+    // };
 }

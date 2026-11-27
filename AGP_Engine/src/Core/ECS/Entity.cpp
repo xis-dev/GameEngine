@@ -2,10 +2,11 @@
 // Created by seer on 11/25/26.
 //
 
-#include "Entity.h"
+#include "../../../include/AGP_Engine/Core/ECS/Entity.h"
+
+#include <ranges>
 
 using namespace AGPEngine;
-static bool isAlive = true;
 
 
 Entity::Entity(bool addTransform)
@@ -18,14 +19,12 @@ Entity::Entity(bool addTransform)
 
 void Entity::update(float deltaTime)
 {
-    while (isAlive)
-    {
-
-
-    };
+    for (auto& component: m_components | std::ranges::views::values) {
+       component->update(deltaTime);
+    }
 }
 
-void Entity::destory()
+void Entity::destroy()
 {
 isAlive = false;
     //TODO: Clean class from memory

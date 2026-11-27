@@ -19,10 +19,20 @@ namespace AGPEngine {
         Level(Level&& l) noexcept = default;
         Level& operator=(Level&& l) noexcept = default;
 
-        Entity* createEntity();
+        Entity* createEntity(const std::optional<std::string>& name = {});
+        Entity* getEntity(const std::string& name);
 
         const std::vector<std::unique_ptr<Entity>>& getEntities() const {return m_entities;}
+
+        // TODO: Gets changed to delegate
+        virtual void onBegin(){}
+        virtual void update(float deltaTime) {
+            for (auto& ent: m_entities) {
+                ent->update(deltaTime);
+            }
+        }
     private:
         std::vector<std::unique_ptr<Entity>> m_entities{};
+        std::unordered_map<std::string, Entity*> m_namedEntities{};
     };
 }

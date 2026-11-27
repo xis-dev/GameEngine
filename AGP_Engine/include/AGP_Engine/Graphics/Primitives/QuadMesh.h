@@ -4,6 +4,7 @@
 
 #include "AGP_Engine/Graphics/GLObjects.h"
 #include "AGP_Engine/Resources/Resource.h"
+#include "AGP_Engine/Graphics/Vertex.h"
 
 namespace AGPEngine {
 
@@ -15,12 +16,28 @@ public:
     QuadMesh();
 
 private:
-    std::unique_ptr<VAO> vao{nullptr};
-    std::unique_ptr<GLBufferObject> vbo{nullptr};
-    std::unique_ptr<GLBufferObject> ebo{nullptr};
-
+    VAO vao{};
+    GLBufferObject vbo{};
+    GLBufferObject ebo{};
 public:
     void draw();
     void destroy();
+
+private:
+
+    static constexpr std::array<Vertex, 4> vertices = {
+        Vertex{.position = { 1.0f, -1.0f, 0.0f}, .uv = {1.0f, 0.0f}},
+        Vertex{.position = { 1.0f,  1.0f, 0.0f}, .uv = {1.0f, 1.0f}},
+        Vertex{.position = {-1.0f,  1.0f, 0.0f}, .uv = {0.0f, 1.0f}},
+        Vertex{.position = {-1.0f, -1.0f, 0.0f}, .uv = {0.0f, 0.0f}}
+    };
+
+    static constexpr std::array<uint32_t, 6> indices = {
+        0, 1, 2,
+        3, 0, 2
+    };
+
+    static constexpr uint32_t IndexSize = sizeof(indices[0]) * indices.size();
+    static constexpr uint32_t VertexSize = sizeof(vertices[0]) * vertices.size();
 
 };

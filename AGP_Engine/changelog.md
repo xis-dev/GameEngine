@@ -14,3 +14,8 @@
 > - Added basic entity and component.
 > - Changed OpenGL version to 4.3 to use SSBOs.
 > - Added model matrix SSBO(the idea behind this is; everything will be rendered as a sprite on a quad, thus we can use the same model data and instancing with different matrices)
+
+> **2026-11-25 - 18:00 - 19:11 | David**
+> - Added basic entity and component.
+> - Changed OpenGL version to 4.3 to use SSBOs.
+> - Added model matrix SSBO(the idea behind this is; everything will be rendered as a sprite on a quad, thus we can use the same model data and instancing with different matrices)

@@ -6,21 +6,24 @@
 #include "Graphics/Primitives/Quad.h"
 
 QuadMesh::QuadMesh() {
-    vao = std::make_unique<VAO>();
-    vbo = std::make_unique<GLBufferObject>();
-    ebo = std::make_unique<GLBufferObject>();
+    vao = VAO::Create();
+    vbo = GLBufferObject::Create();
+    ebo = GLBufferObject::Create();
 
-    vao->bind();
-    glBindBuffer(GL_ARRAY_BUFFER, vbo->getHandle());
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo->getHandle());
+    vao.bind();
+    glBindBuffer(GL_ARRAY_BUFFER, vbo.getHandle());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo.getHandle());
 
-    glBufferData(GL_ARRAY_BUFFER, Quad::VertexSize, Quad::vertices.data(), GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Quad::IndexSize, Quad::indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, VertexSize, vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, IndexSize, indices.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
 
-    vao->unbind();
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+    glEnableVertexAttribArray(1);
+
+    vao.unbind();
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -28,16 +31,16 @@ QuadMesh::QuadMesh() {
 
 void QuadMesh::draw() {
 
-    if (!vao) {
-        std::cerr << "Quad Mesh found nullptr vao.\n";
+    if (!vao.isValid()) {
+        std::cerr << "Quad Mesh found null vao.\n";
         return;
     }
-    vao->bind();
-    glDrawElements(GL_TRIANGLES, Quad::indices.size(), GL_UNSIGNED_INT, nullptr);
+    vao.bind();
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
 void QuadMesh::destroy() {
-    vao->destroy();
-    vbo->destroy();
-    ebo->destroy();
+    vao.destroy();
+    vbo.destroy();
+    ebo.destroy();
 }

@@ -33,7 +33,7 @@ namespace AGPEngine {
         uint32_t modelMatrixSSBOLocation{};
         // Cached so we can avoid rebuilding the ssbo every frame, only when its more or less
         uint32_t lastRenderCount{};
-        uint32_t ssbo{};
+        GLBufferObject ssbo{};
         std::vector<glm::mat4> modelMatrices{};
     };
 }

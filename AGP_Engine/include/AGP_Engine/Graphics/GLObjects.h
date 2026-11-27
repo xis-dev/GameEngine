@@ -4,11 +4,12 @@
 class VAO: public GPUResource {
 
 public:
-    VAO();
+    VAO() = default;
 
     VAO(VAO&&) = default;
     VAO& operator=(VAO&&) = default;
 
+    static VAO Create();
 
     void bind() const;
     void unbind() const;
@@ -18,12 +19,13 @@ public:
 
 class GLBufferObject: public GPUResource {
 public:
-    GLBufferObject();
+    GLBufferObject() = default;
 
     GLBufferObject(GLBufferObject&&) = default;
     GLBufferObject& operator=(GLBufferObject&&) = default;
 
-    // TODO: Binding and buffer data
+    static GLBufferObject Create();
 
+    // TODO: Binding and buffer data
     void destroy() override;
 };

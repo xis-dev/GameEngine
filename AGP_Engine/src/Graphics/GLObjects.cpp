@@ -2,10 +2,12 @@
 
 #include "glad/glad.h"
 
-VAO::VAO() {
-    glGenVertexArrays(1, &m_handle);
-}
 
+VAO VAO::Create() {
+    VAO out;
+    glGenVertexArrays(1, &out.m_handle);
+    return out;
+}
 
 void VAO::bind() const {
     glBindVertexArray(m_handle);
@@ -22,8 +24,10 @@ void VAO::destroy() {
     }
 }
 
-GLBufferObject::GLBufferObject() {
-    glGenBuffers(1, &m_handle);
+GLBufferObject GLBufferObject::Create() {
+    GLBufferObject out;
+    glGenBuffers(1, &out.m_handle);
+    return out;
 }
 
 void GLBufferObject::destroy() {

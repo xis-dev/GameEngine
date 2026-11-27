@@ -48,8 +48,8 @@ set(DEPS_DIRS
 set(DEPS_SOURCES
         ${GLAD_DIR}/glad.c
         include/AGP_Engine/Core/ECS/Components/Animator.h
-        include/AGP_Engine/Core/ECS/Components/Animator.cpp
-        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp)
+        src/Core/ECS/Components/Animator.cpp
+        src/Core/ECS/Components/SpriteRenderer.cpp)
 
 set(PROJECT_SOURCES
         src/Core/Engine.cpp
@@ -59,25 +59,26 @@ set(PROJECT_SOURCES
         src/Resources/ResourceManager.cpp
         src/Resources/Shader.cpp
         include/AGP_Engine/Resources/Shader.h
-        include/AGP_Engine/Core/ECS/Entity.cpp
+        src/Core/ECS/Entity.cpp
         include/AGP_Engine/Core/ECS/Entity.h
-        include/AGP_Engine/Core/ECS/Components/TransformComponent.h
+        include/AGP_Engine/Core/ECS/Components/Transform.h
         include/AGP_Engine/Core/ECS/Components/SpriteRenderer.h
         include/AGP_Engine/Graphics/Primitives/QuadMesh.h
         include/AGP_Engine/Graphics/GLObjects.h
         src/Graphics/GLObjects.cpp
         src/Graphics/QuadMesh.cpp
         include/AGP_Engine/Core/ECS/Components/Animator.h
-        include/AGP_Engine/Core/ECS/Components/Animator.cpp
-        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp
+        src/Core/ECS/Components/Animator.cpp
+        src/Core/ECS/Components/SpriteRenderer.cpp
+        src/Core/ECS/Components/Transform.cpp
 )
 
 add_library(AGP_Engine STATIC
         ${DEPS_SOURCES}
         ${PROJECT_SOURCES}
         include/AGP_Engine/Core/ECS/Components/Animator.h
-        include/AGP_Engine/Core/ECS/Components/Animator.cpp
-        include/AGP_Engine/Core/ECS/Components/SpriteRenderer.cpp)
+        src/Core/ECS/Components/Animator.cpp
+        src/Core/ECS/Components/SpriteRenderer.cpp)
 
 
 

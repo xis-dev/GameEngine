@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Components/Component.h"
-#include "Components/TransformComponent.h"
+#include "Components/Transform.h"
 
 #include <iostream>
 #include <unordered_map>
@@ -33,9 +33,8 @@ namespace AGPEngine {
             if (m_components.contains(Component::GetID<C>())) {
                 std::cout << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition.\n";
             }
-            m_components[Component::GetID<C>()] = C(std::forward<Args>(args)...);
-            C* trans = static_cast<C*>(&m_components[Component::GetID<C>()]);
-            return static_cast<C*>(&m_components[Component::GetID<C>()]);
+            m_components[Component::GetID<C>()] = std::make_unique<C>(std::forward<Args>(args)...);
+            return static_cast<C*>(m_components[Component::GetID<C>()].get());
         }
 
         template <typename C>
@@ -43,7 +42,7 @@ namespace AGPEngine {
         const C* getComponent() const{
             if (!m_components.contains(Component::GetID<C>())) return nullptr;
 
-            return &m_components[Component::GetID<C>()];
+            return m_components[Component::GetID<C>()].get();
         }
 
         template <typename C>
@@ -51,7 +50,7 @@ namespace AGPEngine {
         C* getComponent() {
             if (!m_components.contains(Component::GetID<C>())) return nullptr;
 
-            return &m_components[Component::GetID<C>()];
+            return m_components[Component::GetID<C>()].get();
         }
 
         template <typename C>
@@ -61,11 +60,11 @@ namespace AGPEngine {
         }
 
         virtual void update(float deltaTime);
-        virtual void destory();
+        virtual void destroy();
 
     private:
         // Temporary unordered map, just want this up for SpriteRenderer component to be started
-        std::unordered_map<ComponentID, Component> m_components{};
+        std::unordered_map<ComponentID, std::unique_ptr<Component>> m_components{};
 
         bool isAlive{};
 

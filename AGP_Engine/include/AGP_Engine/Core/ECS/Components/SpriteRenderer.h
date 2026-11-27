@@ -8,6 +8,8 @@
 // #include "glm/vec2.hpp"
 // #include "glm/vec3.hpp"
 // #include "Graphics/Renderer.h"
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 #include "stb_image/stb_image.h"
 #include "SDL3/SDL.h"
 #include "SDL3/SDL_opengl.h"
@@ -15,19 +17,26 @@
 namespace AGPEngine {
 
     class SpriteRenderer: public Component {
-    // public:
-    //     SpriteRenderer(Shader &shader);
-    //     ~SpriteRenderer();
-    //
-    //     void DrawSprite(auto &texture, glm::vec2 position,
-    //         glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f,
-    //         glm::vec3 color = glm::
-    //         vec3(1.0f));
-    // private:
-    //     Shader       shader;
-    //     unsigned int quadVAO;
-    //
-    //     void initRenderData();
+    public:
+        SpriteRenderer() = default;
+
+       // void DrawSprite(auto &texture, glm::vec2 position,
+         //   glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f,
+           // glm::vec3 color = glm::
+            //vec3(1.0f));
+    private:
+        glm::vec2 m_size{};
+        glm::vec3 m_color{};
+        // "z" axis rotation angle
+        float m_rotation{};
+        // Z/Depth sorting layer, default to 1 so the idea of a "background" is 0
+        int zLayer{1};
+
+        // These are pretty much in renderer for now
+       // Shader       shader;
+        //unsigned int quadVAO;
+
+        //void initRenderData();
 
     };
 

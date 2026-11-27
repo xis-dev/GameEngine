@@ -41,7 +41,7 @@ bool Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
    
 }
 
-void Engine::run(const Level& level) {
+void Engine::run(Level& level) {
 
     if (!valid) {
         std::cerr << "AGP_ENGINE: Engine cannot run in an invalid state! It likely has not been initialized or failed to initialize.\n";
@@ -52,6 +52,7 @@ void Engine::run(const Level& level) {
     // TODO: This goes into input manager when it exists
     SDL_Event event;
 
+    level.onBegin();
     while (running) {
 
         // SDL Event handling
@@ -72,6 +73,7 @@ void Engine::run(const Level& level) {
             }
         }
 
+        level.update(0.1f);
         m_renderer->render(level);
     }
 }

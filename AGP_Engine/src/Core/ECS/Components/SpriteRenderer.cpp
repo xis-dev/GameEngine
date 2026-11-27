@@ -2,7 +2,7 @@
 // Created by Joni on 26/11/2026.
 //
 
-#include "SpriteRenderer.h"
+#include "../../../../include/AGP_Engine/Core/ECS/Components/SpriteRenderer.h"
 #ifndef _OPENGL_H
 #define _OPENGL_H
 //#include <GL/glut.h>
