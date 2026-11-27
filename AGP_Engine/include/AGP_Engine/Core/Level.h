@@ -12,6 +12,8 @@ namespace AGPEngine {
     class Level {
 
     public:
+        virtual ~Level() = default;
+
         Level() = default;
         Level(const Level&) = delete;
         Level& operator=(const Level&) = delete;
@@ -25,9 +27,13 @@ namespace AGPEngine {
         const std::vector<std::unique_ptr<Entity>>& getEntities() const {return m_entities;}
 
         // TODO: Gets changed to delegate
-        virtual void onBegin(){}
+        virtual void onBegin() {
+            for (const auto& entity: m_entities) {
+                entity->begin();
+            }
+        }
         virtual void update(float deltaTime) {
-            for (auto& ent: m_entities) {
+            for (const auto& ent: m_entities) {
                 ent->update(deltaTime);
             }
         }

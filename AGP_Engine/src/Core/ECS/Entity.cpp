@@ -17,9 +17,15 @@ Entity::Entity(bool addTransform)
     }
 }
 
+void Entity::begin() {
+    for (const auto& component: m_components | std::ranges::views::values) {
+        component->onBegin();
+    }
+}
+
 void Entity::update(float deltaTime)
 {
-    for (auto& component: m_components | std::ranges::views::values) {
+    for (const auto& component: m_components | std::ranges::views::values) {
        component->update(deltaTime);
     }
 }

@@ -71,6 +71,7 @@ set(PROJECT_SOURCES
         src/Core/ECS/Components/Animator.cpp
         src/Core/ECS/Components/SpriteRenderer.cpp
         src/Core/ECS/Components/Transform.cpp
+        include/AGP_Engine/Utility/Delegate.h
 )
 
 add_library(AGP_Engine STATIC

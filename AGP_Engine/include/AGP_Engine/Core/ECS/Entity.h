@@ -59,6 +59,7 @@ namespace AGPEngine {
             return m_components.contains(Component::GetID<C>());
         }
 
+        virtual void begin();
         virtual void update(float deltaTime);
         virtual void destroy();
 
