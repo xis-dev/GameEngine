@@ -56,6 +56,6 @@ namespace AGPEngine {
         GLBufferObject m_modelMatrixSSBO{};
         */
 
-        
+
     };
 }
