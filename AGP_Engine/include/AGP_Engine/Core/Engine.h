@@ -24,6 +24,10 @@ namespace AGPEngine {
 
         [[nodiscard]] bool isValid() const;
 
+
+        // Only works if isValid() is true. We can reach the camera via getRenderer().getCamera()
+        [[nodiscard]] Renderer& getRenderer() { return *m_renderer; }
+
     private:
         // Engine has been initialized and is in a valid state to be destroyed
         bool valid{};

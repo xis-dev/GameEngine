@@ -1,4 +1,6 @@
 #pragma once
+
+#include <array>
 #include <cstdint>
 #include <memory>
 
@@ -21,6 +23,7 @@ private:
     GLBufferObject ebo{};
 public:
     void draw();
+    void drawInstanced(uint32_t instanceCount); //Draw instanceCount copies of the same quad in one call (gl_InstanceID uses the model matrix)
     void destroy();
 
 private:

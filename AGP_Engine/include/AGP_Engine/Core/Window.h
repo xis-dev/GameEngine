@@ -34,6 +34,7 @@ namespace AGPEngine {
         void swapBuffers() const;
         [[nodiscard]] SDL_Window* getNativeWindow() const { return m_sdlWindow; }
         void getSize(int& w, int& h) const;
+        void getPixelSize(int& w, int& h) const;
         void setVsync(bool on);
 
         [[nodiscard]] bool isValid() const;

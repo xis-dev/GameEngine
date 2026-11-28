@@ -49,7 +49,8 @@ set(DEPS_SOURCES
         ${GLAD_DIR}/glad.c
         include/AGP_Engine/Core/ECS/Components/Animator.h
         src/Core/ECS/Components/Animator.cpp
-        src/Core/ECS/Components/SpriteRenderer.cpp)
+        src/Core/ECS/Components/SpriteRenderer.cpp
+        include/AGP_Engine/Graphics/Camera2D.h)
 
 set(PROJECT_SOURCES
         src/Core/Engine.cpp
@@ -76,6 +77,7 @@ set(PROJECT_SOURCES
         src/Core/ECS/Components/Transform.cpp
         include/AGP_Engine/Utility/Delegate.h
         src/main.cpp
+        include/AGP_Engine/Graphics/Camera2D.h
 )
 
 add_library(AGP_Engine STATIC
@@ -83,7 +85,8 @@ add_library(AGP_Engine STATIC
         ${PROJECT_SOURCES}
         include/AGP_Engine/Core/ECS/Components/Animator.h
         src/Core/ECS/Components/Animator.cpp
-        src/Core/ECS/Components/SpriteRenderer.cpp)
+        src/Core/ECS/Components/SpriteRenderer.cpp
+        include/AGP_Engine/Graphics/Camera2D.h)
 
 
 
