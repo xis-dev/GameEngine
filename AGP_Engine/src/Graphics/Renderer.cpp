@@ -4,8 +4,10 @@
 
 #include "../../include/AGP_Engine/Graphics/Renderer.h"
 
+#include <algorithm>
 #include <filesystem>
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include "AGP_Engine/Utility/Utility.h"
 #include "Core/ECS/Components/SpriteRenderer.h"
@@ -33,9 +35,25 @@ namespace  AGPEngine
 
         glViewport(0, 0, vpWidth, vpHeight);
 
+        //TODO: Handle pixel color be handled as transparent (for the Xenon 2000 sprites)
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        onResize(vpWidth, vpHeight);
+
+
         // Init triangle shader
         m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "quad.vert", std::filesystem::path(SHADER_DIR).string() + "textured_quad.frag");
+        if (!m_spriteShader.isValid())
+        {
+            std::cerr << "AGP_ENGINE::RENDERER: Failed to load shaders.\n";
+        }
         m_spriteMesh = std::make_unique<QuadMesh>();
+
+        m_modelMatrixSSBO = GLBufferObject::Create();
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_modelMatrixSSBO.getHandle());
+
+        m_valid = true;
 
         // TODO: Temp ssbo generation
         m_modelMatrixSSBO = GLBufferObject::Create();
@@ -60,10 +78,43 @@ namespace  AGPEngine
         //TODO: VAO and VBO cleanup here (no leaks)
     }
 
-    void Renderer::render(const Level& level) {
+    void Renderer::render(const Level& level)
+    {
 
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        /*if (m_valid) {
+            // 1. Gather one model matrix per drawable entity. Everything is a sprite on the same quad,
+            //    so the matrices are all the GPU needs to know to place them.
+            m_modelMatrices.clear();
+            for (const auto& ent: level.getEntities()) {
+                if (!ent->isAlive() || !ent->transform || !ent->hasComponent<SpriteRenderer>()) continue;
+                m_modelMatrices.push_back(ent->transform->getTransform());
+            }
+
+            if (!m_modelMatrices.empty()) {
+                // 2. Upload them in one go. Only reallocate the buffer when it has to grow.
+                const size_t bytes = m_modelMatrices.size() * sizeof(glm::mat4);
+                glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_modelMatrixSSBO.getHandle());
+                if (bytes > m_modelMatrixSSBOCapacity) {
+                    // Grow geometrically so spawning lots of entities doesn't reallocate every frame
+                    m_modelMatrixSSBOCapacity = std::max(bytes, m_modelMatrixSSBOCapacity * 2);
+                    glBufferData(GL_SHADER_STORAGE_BUFFER, static_cast<GLsizeiptr>(m_modelMatrixSSBOCapacity), nullptr, GL_DYNAMIC_DRAW);
+                }
+                glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, static_cast<GLsizeiptr>(bytes), m_modelMatrices.data());
+                glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+                glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_modelMatrixSSBO.getHandle());
+
+                // 3. One draw call for every sprite
+                m_spriteShader.use();
+                glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(m_camera.getViewProjection()));
+                m_spriteMesh->drawInstanced(static_cast<uint32_t>(m_modelMatrices.size()));
+            }
+        }
+
+        m_renderWindow->swapBuffers();
+    };*/
 
         glUseProgram(m_spriteShader.getHandle());
 
