@@ -24,6 +24,11 @@ namespace AGPEngine {
 
         Transform* transform{nullptr};
 
+
+
+
+
+
         template <typename C, typename... Args>
         requires std::derived_from<C, Component> &&
             std::is_constructible_v<C, Args...>
@@ -31,19 +36,35 @@ namespace AGPEngine {
 
             // Let it override last component but issue warning
             if (m_components.contains(Component::GetID<C>())) {
-                std::cout << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition.\n";
+                std::cout << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition. Duplicate Component?\n";
             }
-            m_components[Component::GetID<C>()] = std::make_unique<C>(std::forward<Args>(args)...);
-            return static_cast<C*>(m_components[Component::GetID<C>()].get());
+            //Split the Component setup. I feel it works the same way, but is more readable
+            auto component = std::make_unique<C>(std::forward<Args>(args)...);
+            C* out = component.get();
+            out->owner = this;
+
+            m_components[Component::GetID<C>()] = std::move(component);
+            return out;
         }
+
+
+
+
 
         template <typename C>
         requires std::derived_from<C, Component>
-        const C* getComponent() const{
+        const C* getComponent() const {
             if (!m_components.contains(Component::GetID<C>())) return nullptr;
 
-            return m_components[Component::GetID<C>()].get();
+            auto it = m_components.find(Component::GetID<C>());
+            if (it == m_components.end()) return nullptr;
+
+            return static_cast<const C*>(it->second.get());
         }
+
+
+
+
 
         template <typename C>
         requires std::derived_from<C, Component>
@@ -53,11 +74,18 @@ namespace AGPEngine {
             return m_components[Component::GetID<C>()].get();
         }
 
+
+
+
+
         template <typename C>
         requires std::derived_from<C, Component>
         bool hasComponent() const {
             return m_components.contains(Component::GetID<C>());
         }
+
+
+
 
         virtual void begin();
         virtual void update(float deltaTime);
