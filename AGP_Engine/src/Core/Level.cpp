@@ -3,6 +3,7 @@
 //
 
 #include "../../include/AGP_Engine/Core/Level.h"
+#include <algorithm>
 
 AGPEngine::Entity * AGPEngine::Level::createEntity(const std::optional<std::string> &name)  {
     m_entities.push_back(std::unique_ptr<Entity>(new Entity()));

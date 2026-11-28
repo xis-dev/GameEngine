@@ -1,4 +1,5 @@
 #include "Core/Engine.h"
+#include <algorithm>
 #include <iostream>
 #include "SDL3/SDL.h"
 #include "Graphics/Renderer.h"
@@ -31,8 +32,26 @@ bool Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
     }
 
     m_window = std::make_unique<Window>(std::move(win.value()));
+    m_window->setVsync(true);
+
+    int pixelW = winWidth;
+    int pixelH = winHeight;
+    m_window->getPixelSize(pixelW, pixelH);
+
+
     m_renderer = std::make_unique<Renderer>(m_window.get(), winWidth, winHeight);
-    
+    if (!m_renderer || !m_renderer->isValid())
+    {
+        std::cerr << "AGP_ENGINE: Engine Initialization Failed: Renderer could not be created.\n";
+        m_renderer->destroy();
+        m_renderer.reset();
+        m_window.reset();
+        Window::CleanupBackend();
+        valid = false;
+        return valid;
+    }
+
+
     //Renderer::Init();
     valid = true;
     return valid;
@@ -52,14 +71,29 @@ void Engine::run(Level& level) {
     // TODO: This goes into input manager when it exists
     SDL_Event event;
 
+
+    // Deltatime measured with the high res counter
+    const auto  counterFrequency = static_cast<double>(SDL_GetPerformanceFrequency());
+    uint64_t lastCounter = SDL_GetPerformanceCounter();
+
+    // Cap Deltatime at 1s, so dragging the window or hitting a breakpoint doesn't result in a huge update when the loop resumes
+    constexpr float MaxDeltaTime = 0.1f;
+
+
     level.onGameBegin();
     while (running) {
+        const uint64_t currentTime = SDL_GetPerformanceCounter();
+        const double deltaTime = std::min(static_cast<float>(static_cast<double>(currentTime - lastCounter) / counterFrequency), MaxDeltaTime);
 
         // SDL Event handling
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_EVENT_QUIT:
                     running = false;
+                    break;
+
+                case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+                        m_renderer->onResize(event.window.data1, event.window.data2);
                     break;
 
                     // Key events
@@ -73,7 +107,7 @@ void Engine::run(Level& level) {
             }
         }
 
-        level.update(0.1f);
+        level.update(deltaTime);
         m_renderer->render(level);
 
         level.updateEnd();

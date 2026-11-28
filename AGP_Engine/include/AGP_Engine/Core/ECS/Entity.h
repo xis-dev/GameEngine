@@ -36,7 +36,7 @@ namespace AGPEngine {
 
             // Let it override last component but issue warning
             if (m_components.contains(Component::GetID<C>())) {
-                std::cout << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition. Duplicate Component?\n";
+                std::cerr << "AGP_ENGINE::ENTITY: Warning: Overriding already existing component with this definition. Duplicate Component?\n";
             }
             //Split the Component setup. I feel it works the same way, but is more readable
             auto component = std::make_unique<C>(std::forward<Args>(args)...);

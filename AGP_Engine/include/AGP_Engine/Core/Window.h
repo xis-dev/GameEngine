@@ -26,7 +26,7 @@ namespace AGPEngine {
         static void InitializeBackend();
         
         // Window creation may fail, expected to error handle on failure
-        [[nodiscard]]static std::expected<Window, Error<Window>> Create(const std::string& title, int w, int h);
+        [[nodiscard]]static std::expected<Window, Error<Window>> Create(const std::string& title, int width, int height);
         static void CleanupBackend();
         [[nodiscard]] static void* GetProcAddress(const char* name) ;
         static void MakeRenderContext(const Window& window);
