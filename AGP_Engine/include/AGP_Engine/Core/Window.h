@@ -6,6 +6,7 @@
 #include <string>
 
 #include "AGP_Engine/Utility/Utility.h"
+#include "AGP_Engine/Utility/Delegate.h"
 
 namespace AGPEngine {
 
@@ -41,6 +42,13 @@ namespace AGPEngine {
 
         void destroy();
 
+        // Delegates
+        Delegate<int, int> OnResized{};
+        Delegate<> OnClosed{};
+        Delegate<bool> OnMinimizedState{}; // Returns true if minimized
+
+        void pollEvents();
+        bool shouldClose() const;
     private:
         // Private constructor to easily construct from SDL windows
         explicit Window(SDL_Window* sdlWindow, SDL_GLContext sdlContext): m_sdlWindow(sdlWindow), m_glContext(sdlContext){}
@@ -50,6 +58,9 @@ namespace AGPEngine {
         SDL_Window* m_sdlWindow{nullptr};
         SDL_GLContext m_glContext{nullptr};
         static bool BackendIsInitialized;
+        bool m_shouldClose{false};
+
+        void startCloseWindow();
     };
 }
 

@@ -44,8 +44,8 @@ void QuadMesh::drawInstanced(uint32_t instanceCount)
 
     if (!vao.isValid()) {
         std::cerr << "Quad Mesh found null vao.\n";
+        return;
     }
-    return;
     if (instanceCount == 0) return;
 
     vao.bind();

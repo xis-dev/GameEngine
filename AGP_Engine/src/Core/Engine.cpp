@@ -18,7 +18,7 @@ Engine::Engine(int winWidth, int winHeight, const std::string &winTitle, bool ru
 
 Engine::~Engine() {
     if (valid) {
-        cleanup();
+        shutdown();
     }
 }
 
@@ -32,6 +32,7 @@ bool Engine::init(int winWidth, int winHeight, const std::string &winTitle) {
     }
 
     m_window = std::make_unique<Window>(std::move(win.value()));
+    //m_window->OnClosed.bindFunction(this, &Engine::shutdown);
     m_window->setVsync(true);
 
     int pixelW = winWidth;
@@ -67,11 +68,6 @@ void Engine::run(Level& level) {
         return;
     }
 
-    bool running = true;
-    // TODO: This goes into input manager when it exists
-    SDL_Event event;
-
-
     // Deltatime measured with the high res counter
     const auto  counterFrequency = static_cast<double>(SDL_GetPerformanceFrequency());
     uint64_t lastCounter = SDL_GetPerformanceCounter();
@@ -81,31 +77,11 @@ void Engine::run(Level& level) {
 
 
     level.onGameBegin();
-    while (running) {
+    while (!m_window->shouldClose()) {
         const uint64_t currentTime = SDL_GetPerformanceCounter();
         const double deltaTime = std::min(static_cast<float>(static_cast<double>(currentTime - lastCounter) / counterFrequency), MaxDeltaTime);
 
-        // SDL Event handling
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_EVENT_QUIT:
-                    running = false;
-                    break;
-
-                case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-                        m_renderer->onResize(event.window.data1, event.window.data2);
-                    break;
-
-                    // Key events
-                case SDL_EVENT_KEY_DOWN:
-                    if (event.key.key == SDLK_ESCAPE)
-                        running = false;
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        m_window->pollEvents();
 
         level.update(deltaTime);
         m_renderer->render(level);
@@ -114,13 +90,15 @@ void Engine::run(Level& level) {
     }
 }
 
-void Engine::cleanup() {
+void Engine::shutdown() {
 
     //Renderer::Shutdown();
 
     m_renderer->destroy();
     m_window->destroy();
     Window::CleanupBackend();
+
+    valid = false;
     
 }
 

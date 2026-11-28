@@ -25,7 +25,7 @@ void TestComponent::onBegin() {
 
 void TestComponent::update(float deltaTime) {
     Component::update(deltaTime);
-    std::cout << "Test Component: Update" << std::endl;
+    //std::cout << "Test Component: Update" << std::endl;
 }
 
 void TestComponent::onDestroy() {

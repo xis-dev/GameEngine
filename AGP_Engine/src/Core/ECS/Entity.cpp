@@ -36,6 +36,10 @@ void Entity::update(float deltaTime)
 void Entity::destroy()
 {
     m_alive = false;
+    for (const auto& c: m_components | std::ranges::views::values) {
+        c->onDestroy();
+    }
+
     //TODO: Clean class from memory
 }
 

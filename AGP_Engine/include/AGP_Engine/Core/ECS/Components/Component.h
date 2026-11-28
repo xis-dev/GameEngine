@@ -2,8 +2,6 @@
 #include <concepts>
 #include <cstdint>
 
-#include "Core/ECS/Entity.h"
-#include "Core/ECS/Entity.h"
 
 // TODO: Actual ECS, using map of components for now
 // Specialized template def takes priority
@@ -35,8 +33,7 @@ namespace AGPEngine {
     using ComponentID = uint32_t;
     struct Component {
 
-
-    Entity* owner{nullptr};
+    class Entity* owner{nullptr};
 
         template <typename C>
         requires std::derived_from<C, Component>

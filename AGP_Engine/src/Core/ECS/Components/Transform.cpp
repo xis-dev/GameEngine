@@ -28,8 +28,3 @@ glm::mat4 AGPEngine::Transform::getTransform() const {
     out = glm::translate(out, m_position);
     return out;
 }
-
-void AGPEngine::Transform::update(float deltaTime) {
-    Component::update(deltaTime);
-    std::cout << "Transform component: I'm transforminggggggggggggg\n";
-}

@@ -33,6 +33,5 @@ namespace AGPEngine {
 
         [[nodiscard]] glm::mat4 getTransform() const;
 
-      //  void update(float deltaTime) override;
     };
 }

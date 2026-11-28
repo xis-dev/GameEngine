@@ -9,6 +9,11 @@ namespace AGPEngine {
 
 bool Window::BackendIsInitialized = false;
 
+void Window::startCloseWindow() {
+    m_shouldClose = true;
+    OnClosed.broadcast();
+}
+
 
 std::expected<Window, Error<Window>> Window::Create(const std::string& title, int width, int height) {
     if (!BackendIsInitialized) {
@@ -81,6 +86,33 @@ void Window::destroy() {
         m_sdlWindow = nullptr;
     }
 }
+
+void Window::pollEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        switch (event.type) {
+            case SDL_EVENT_QUIT:
+                startCloseWindow();
+                break;
+
+            case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
+                OnResized.broadcast(event.window.data1, event.window.data2);
+                break;
+
+                // TODO: These would actually be abstracted in input manager and then window subscribes to those
+            case SDL_EVENT_KEY_DOWN:
+                if (event.key.key == SDLK_ESCAPE) {
+                    OnClosed.broadcast();
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
+bool Window::shouldClose() const {return m_shouldClose;}
 
 Window::~Window() {
     if (isValid()) {

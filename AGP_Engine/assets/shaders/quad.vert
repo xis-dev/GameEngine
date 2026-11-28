@@ -6,7 +6,6 @@ layout (location = 1) in vec2 aUV;
 // Camera: projection * view, uploaded once per frame
 layout (location = 0) uniform mat4 uViewProj;
 
-
 layout (binding = 0, std430) readonly buffer modelMats {
     mat4 m_modelMatrices[];
 };

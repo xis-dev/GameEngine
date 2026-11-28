@@ -24,11 +24,6 @@ namespace AGPEngine {
 
         Transform* transform{nullptr};
 
-
-
-
-
-
         template <typename C, typename... Args>
         requires std::derived_from<C, Component> &&
             std::is_constructible_v<C, Args...>

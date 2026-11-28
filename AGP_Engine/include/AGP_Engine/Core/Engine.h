@@ -20,7 +20,7 @@ namespace AGPEngine {
 
         bool init(int winWidth, int winHeight, const std::string &winTitle);
         void run(Level &level);
-        void cleanup();
+        void shutdown();
 
         [[nodiscard]] bool isValid() const;
 
@@ -34,6 +34,5 @@ namespace AGPEngine {
 
         std::unique_ptr<Window> m_window{nullptr};
         std::unique_ptr<Renderer> m_renderer{nullptr};
-
     };
 }

@@ -4,8 +4,12 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <ranges>
 #include <utility>
+#include <unordered_map>
+#include <vector>
 
+namespace AGPEngine {
 using SubscriptionId = uint32_t;
 constexpr SubscriptionId InvalidSubscription = UINT32_MAX;
 
@@ -18,11 +22,12 @@ struct DelegateState {
     };
 
     std::unordered_map<SubscriptionId, std::shared_ptr<Slot>> slots{};
+    mutable std::vector<std::shared_ptr<Slot>> slotSnapshot{};
     SubscriptionId next = 0;
 
     SubscriptionId add(std::function<void(Params...)> fn) {
         const SubscriptionId id = ++next;
-        slots.emplace({id, std::make_shared<Slot>(std::move(fn))});
+        slots.insert({id, std::make_shared<Slot>(std::move(fn))});
         return id;
     }
 
@@ -35,8 +40,9 @@ struct DelegateState {
 
     }
 
-};
 
+};
+    // Scoped bindings so delegates dont need to be manually unbound, on RAII principles
 template <typename... Params>
 class ScopedBinding {
     // Weak so unbind will fail if the delegate happened to be destroyed first
@@ -79,7 +85,7 @@ public:
 };
 
 template <typename... Params>
-struct Delegate {
+class Delegate {
     using State = DelegateState<Params...>;
 
     std::shared_ptr<State> m_state = std::make_shared<State>();
@@ -128,20 +134,21 @@ public:
     }
 
     void unbind(SubscriptionId id) { m_state->remove(id); }
-    void clear() { while (!m_state->slots.empty()) m_state->remove(m_state->slots.back().first); }
+    void clear() { m_state->slots.clear(); }
     size_t size() const { return m_state->slots.size(); }
 
     void broadcast(Params... params) const {
-        for (auto& [id, slot] : m_state->slots) {
+        m_state->slotSnapshot.clear();
+        for (auto& slot: m_state->slots | std::ranges::views::values) {
             if (slot->active) {
-                slot->func(params...);
+                m_state->slotSnapshot.push_back(slot);
             }
+        }
+
+        for (auto& slot: m_state->slotSnapshot) {
+            slot->func(params...);
         }
     }
 };
 
-struct Event: public Delegate<>
-{
-
-};
-
+}

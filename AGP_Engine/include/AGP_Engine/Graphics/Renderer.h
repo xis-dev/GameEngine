@@ -24,8 +24,6 @@ namespace AGPEngine {
         void destroy();
         void changeContextWindow(Window* win);
 
-        void onResize(int pixelWidth, int pixelHeight);
-
         [[nodiscard]] Camera2D& getCamera() {return m_camera;};
         [[nodiscard]] const Camera2D& getCamera() const {return m_camera;};
 
@@ -34,7 +32,6 @@ namespace AGPEngine {
         int m_viewportWidth{};
         int m_viewportHeight{};
         Window* m_renderWindow{nullptr};
-
 
         Camera2D m_camera{};
 
@@ -49,13 +46,9 @@ namespace AGPEngine {
         size_t m_modelMatrixSSBOCapacity{0};
         std::vector<glm::mat4> m_modelMatrices{};
 
-        /*
-         * // Cached so we dont constantly need to get location every frame
-        uint32_t m_modelMatrixSSBOLocation{};
-        // Cached so we can avoid rebuilding the ssbo every frame, only when its more or less
-        GLBufferObject m_modelMatrixSSBO{};
-        */
-
+        // Callback functions and bindings
+        ScopedBinding<int, int> WindowResizedBinding{};
+        void onWindowResized(int width, int height);
 
     };
 }

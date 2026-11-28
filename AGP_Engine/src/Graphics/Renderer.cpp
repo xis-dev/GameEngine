@@ -4,15 +4,18 @@
 
 #include "../../include/AGP_Engine/Graphics/Renderer.h"
 
-#include <algorithm>
-#include <filesystem>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
+
 #include "AGP_Engine/Utility/Utility.h"
 #include "Core/ECS/Components/SpriteRenderer.h"
 #include "Graphics/Primitives/Quad.h"
-#include "Graphics/Primitives/Triangle.h"
+
+#include <format>
+#include <algorithm>
+#include <filesystem>
+#include <iostream>
+
 
 namespace  AGPEngine
 {
@@ -38,9 +41,6 @@ namespace  AGPEngine
         //TODO: Handle pixel color be handled as transparent (for the Xenon 2000 sprites)
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        onResize(vpWidth, vpHeight);
-
 
         // Init triangle shader
         m_spriteShader = Shader(std::filesystem::path(SHADER_DIR).string() + "quad.vert", std::filesystem::path(SHADER_DIR).string() + "textured_quad.frag");
@@ -80,71 +80,40 @@ namespace  AGPEngine
 
     void Renderer::render(const Level& level)
     {
+        if (!m_valid) return;
 
         glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        /*if (m_valid) {
-            // 1. Gather one model matrix per drawable entity. Everything is a sprite on the same quad,
-            //    so the matrices are all the GPU needs to know to place them.
-            m_modelMatrices.clear();
-            for (const auto& ent: level.getEntities()) {
-                if (!ent->isAlive() || !ent->transform || !ent->hasComponent<SpriteRenderer>()) continue;
-                m_modelMatrices.push_back(ent->transform->getTransform());
-            }
-
-            if (!m_modelMatrices.empty()) {
-                // 2. Upload them in one go. Only reallocate the buffer when it has to grow.
-                const size_t bytes = m_modelMatrices.size() * sizeof(glm::mat4);
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_modelMatrixSSBO.getHandle());
-                if (bytes > m_modelMatrixSSBOCapacity) {
-                    // Grow geometrically so spawning lots of entities doesn't reallocate every frame
-                    m_modelMatrixSSBOCapacity = std::max(bytes, m_modelMatrixSSBOCapacity * 2);
-                    glBufferData(GL_SHADER_STORAGE_BUFFER, static_cast<GLsizeiptr>(m_modelMatrixSSBOCapacity), nullptr, GL_DYNAMIC_DRAW);
-                }
-                glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, static_cast<GLsizeiptr>(bytes), m_modelMatrices.data());
-                glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-                glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_modelMatrixSSBO.getHandle());
-
-                // 3. One draw call for every sprite
-                m_spriteShader.use();
-                glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(m_camera.getViewProjection()));
-                m_spriteMesh->drawInstanced(static_cast<uint32_t>(m_modelMatrices.size()));
-            }
-        }
-
-        m_renderWindow->swapBuffers();
-    };*/
-
-        glUseProgram(m_spriteShader.getHandle());
-
-        int renderInstance = 0;
+        // 1. Gather one model matrix per drawable entity. Everything is a sprite on the same quad,
+        //    so the matrices are all the GPU needs to know to place them.
+        m_modelMatrices.clear();
         for (const auto& ent: level.getEntities()) {
+            if (!ent->isAlive() || !ent->transform || !ent->hasComponent<SpriteRenderer>()) continue;
+            m_modelMatrices.push_back(ent->transform->getTransform());
+        }
 
-            if (ent->hasComponent<Transform>() && ent->hasComponent<SpriteRenderer>()) {
-                // Only push back once there's too many instances to render
-                if (renderInstance >= m_modelMatrices.size()) {
-                    m_modelMatrices.push_back(ent->transform->getTransform());
-                }
-                else {
-                   m_modelMatrices[renderInstance] = ent->transform->getTransform();
-                }
-                ++renderInstance;
-            }
-
+        if (!m_modelMatrices.empty()) {
+            // 2. Upload them in one go. Only reallocate the buffer when it has to grow.
+            const size_t bytes = m_modelMatrices.size() * sizeof(glm::mat4);
             glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_modelMatrixSSBO.getHandle());
-            glBufferData(GL_SHADER_STORAGE_BUFFER, m_modelMatrices.size() * sizeof(glm::mat4), m_modelMatrices.data(), GL_DYNAMIC_DRAW);
+            if (bytes > m_modelMatrixSSBOCapacity) {
+                // Grow geometrically so spawning lots of entities doesn't reallocate every frame
+                m_modelMatrixSSBOCapacity = std::max(bytes, m_modelMatrixSSBOCapacity * 2);
+                glBufferData(GL_SHADER_STORAGE_BUFFER, static_cast<GLsizeiptr>(m_modelMatrixSSBOCapacity), nullptr, GL_DYNAMIC_DRAW);
+            }
+            glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, static_cast<GLsizeiptr>(bytes), m_modelMatrices.data());
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_modelMatrixSSBO.getHandle());
 
-            m_spriteMesh->draw();
-            // TODO: Change this, probably cache sprite renderer entities
-            // if (lastRenderCount < level.getEntities().size()) {
-            //     lastRenderCount = level.getEntities().size();
-            //
-            //
-            // }
+            // 3. One draw call for every sprite
+            m_spriteShader.use();
+            glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(m_camera.getViewProjection()));
+            m_spriteMesh->drawInstanced(static_cast<uint32_t>(m_modelMatrices.size()));
         }
 
         m_renderWindow->swapBuffers();
+
     }
 
     void Renderer::destroy() {
@@ -158,8 +127,16 @@ namespace  AGPEngine
             std::cerr << "AGP_ENGINE::RENDERER: Found null window while changing renderer context window.\n";
             return;
         }
+        // Unbind if there was already a previous window
+        if (m_renderWindow) WindowResizedBinding.unbind();
+
         Window::MakeRenderContext(*win);
         m_renderWindow = win;
+        WindowResizedBinding = m_renderWindow->OnResized.bindScoped(this, &Renderer::onWindowResized);
+    }
+
+    void Renderer::onWindowResized(int width, int height) {
+        std::cout << std::format("AGP_ENGINE::RENDERER: Window was resized '{},{}', I should be doing something.\n", width, height);
     }
 }
 
