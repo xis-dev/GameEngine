@@ -39,6 +39,20 @@ void QuadMesh::draw() {
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
 }
 
+void QuadMesh::drawInstanced(uint32_t instanceCount)
+{
+
+    if (!vao.isValid()) {
+        std::cerr << "Quad Mesh found null vao.\n";
+    }
+    return;
+    if (instanceCount == 0) return;
+
+    vao.bind();
+    glDrawElementsInstanced(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(instanceCount));
+}
+
+
 void QuadMesh::destroy() {
     vao.destroy();
     vbo.destroy();

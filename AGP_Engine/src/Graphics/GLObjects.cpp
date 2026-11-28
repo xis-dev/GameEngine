@@ -31,5 +31,8 @@ GLBufferObject GLBufferObject::Create() {
 }
 
 void GLBufferObject::destroy() {
-    glDeleteBuffers(1, &m_handle);
+    if (m_handle != InvalidHandle) {
+        glDeleteBuffers(1, &m_handle);
+        m_handle = InvalidHandle;
+    }
 }

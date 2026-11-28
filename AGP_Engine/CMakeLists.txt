@@ -51,7 +51,8 @@ set(DEPS_SOURCES
         src/Core/ECS/Components/Animator.cpp
         src/Core/ECS/Components/SpriteRenderer.cpp
         include/AGP_Engine/Graphics/Camera2D.h
-        src/ECS/Components/Transform.cpp)
+        src/ECS/Components/Transform.cpp
+        src/Graphics/Camera2D.cpp)
 
 set(PROJECT_SOURCES
         src/Core/Engine.cpp
@@ -80,6 +81,7 @@ set(PROJECT_SOURCES
         src/main.cpp
         include/AGP_Engine/Graphics/Camera2D.h
         src/ECS/Components/Transform.cpp
+        src/Graphics/Camera2D.cpp
 )
 
 add_library(AGP_Engine STATIC
@@ -89,7 +91,8 @@ add_library(AGP_Engine STATIC
         src/Core/ECS/Components/Animator.cpp
         src/Core/ECS/Components/SpriteRenderer.cpp
         include/AGP_Engine/Graphics/Camera2D.h
-        src/ECS/Components/Transform.cpp)
+        src/ECS/Components/Transform.cpp
+        src/Graphics/Camera2D.cpp)
 
 
 
